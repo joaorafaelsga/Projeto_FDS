@@ -35,7 +35,7 @@ Aplicação web focada para reforçar e ensinar a importancia da tecnica de  ESG
 
 ###  Entrega 1:
 
-- **[Documento de Análise de Competidores]()
+- **[Documento de Análise de Competidores](https://github.com/joaorafaelsga/Projeto_FDS/blob/main/Analise_de_competidores.md)
 
 - **BenchMark da Análise de Competidores:**
 

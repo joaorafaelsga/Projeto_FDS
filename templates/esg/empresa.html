@@ -1,25 +1,25 @@
 {% extends 'esg/base.html' %}
 
-{% block title %}
-Sobre a Empresa
-{% endblock %}
-
 {% block content %}
-    <h1>Sobre a Empresa ESGfy</h1>
-
-    <p>
-        Esta página apresenta informações sobre a ESGfy atendida pelo
-        projeto e seu contexto de atuação.
-    </p>
-
-    <p>
-        O objetivo é compreender as características da organização,
-        seu segmento de atuação e os desafios relacionados à adoção
-        de práticas de ESG.
-    </p>
-
-    <p>
-        As informações específicas sobre a empresa serão apresentadas
-        de acordo com os dados fornecidos pelo cliente do projeto.
-    </p>
+<section class="about-container" style="max-width: 1000px;">
+    <div class="card">
+        <h2>A Nossa Visão Empresarial</h2>
+        <p>A ESGfy trabalha para transformar a forma como as organizações encaram a sustentabilidade e a transparência.</p>
+        
+        <div class="card-container">
+            <div class="card" style="background-color: var(--bg-light); box-shadow: none; border: 1px solid #ECEFF1; padding: 24px;">
+                <h3 style="color: var(--esg-green);">Ambiental</h3>
+                <p style="font-size: 14px; color: var(--text-muted);">Redução de emissões, eficiência energética e gestão responsável de resíduos.</p>
+            </div>
+            <div class="card" style="background-color: var(--bg-light); box-shadow: none; border: 1px solid #ECEFF1; padding: 24px;">
+                <h3 style="color: var(--esg-blue);">Social</h3>
+                <p style="font-size: 14px; color: var(--text-muted);">Inclusão, bem-estar corporativo e impacto positivo nas comunidades locais.</p>
+            </div>
+            <div class="card" style="background-color: var(--bg-light); box-shadow: none; border: 1px solid #ECEFF1; padding: 24px;">
+                <h3 style="color: var(--text-dark);">Governança</h3>
+                <p style="font-size: 14px; color: var(--text-muted);">Ética, conformidade rigorosa e políticas de transparência ativas.</p>
+            </div>
+        </div>
+    </div>
+</section>
 {% endblock %}

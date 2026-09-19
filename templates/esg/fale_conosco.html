@@ -1,29 +1,27 @@
 {% extends 'esg/base.html' %}
 
-{% block title %}
-Fale Conosco
-{% endblock %}
-
 {% block content %}
-
-    <h1>Fale Conosco</h1>
-
-    <p>
-        Entre em contato conosco através do formulário abaixo.
-    </p>
-
-    {% if messages %}
-        {% for message in messages %}
-            <p>{{ message }}</p>
-        {% endfor %}
-    {% endif %}
-
-    <form method="post">
-        {% csrf_token %}
-
-        {{ form.as_p }}
-
-        <button type="submit">Enviar</button>
-    </form>
-
+<section class="about-container" style="max-width: 600px;">
+    <div class="card">
+        <h2>Fale Connosco</h2>
+        <p style="margin-bottom: 24px; color: var(--text-muted);">Pretende otimizar as práticas da sua empresa ou saber mais sobre o nosso projeto? Envie-nos uma mensagem.</p>
+        
+        <form action="" method="POST">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="id_nome">Nome</label>
+                <input type="text" id="id_nome" name="nome" class="form-control" required placeholder="O seu nome completo">
+            </div>
+            <div class="form-group">
+                <label for="id_email">E-mail</label>
+                <input type="email" id="id_email" name="email" class="form-control" required placeholder="endereço@empresa.com">
+            </div>
+            <div class="form-group">
+                <label for="id_mensagem">Mensagem</label>
+                <textarea id="id_mensagem" name="mensagem" class="form-control" rows="5" required placeholder="Como podemos ajudar a sua PME?"></textarea>
+            </div>
+            <button type="submit" class="btn-primary" style="width: 100%; margin-top: 10px;">Enviar Mensagem</button>
+        </form>
+    </div>
+</section>
 {% endblock %}

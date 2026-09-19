@@ -1,22 +1,29 @@
 {% load static %}
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-pt">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Conscientização ESG para PMEs</title>
-    
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
-    
-    
-    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <title>Diagnóstico ESG para PMEs</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <!-- O caminho foi ajustado para corresponder ao seu static/style.css -->
+    <link rel="stylesheet" href="{% static 'style.css' %}">
 </head>
 <body>
-    
-    <main style="padding: 20px;">
+    <header class="navbar">
+        <div class="logo">ESGfy</div>
+        <nav>
+            <a href="{% url 'home' %}">Início</a>
+            <a href="{% url 'quem_somos' %}">Quem Somos</a>
+            <a href="{% url 'empresa' %}">Sobre a Empresa</a>
+            <a href="{% url 'projeto' %}">Sobre o Projeto</a>
+            <a href="{% url 'fale_conosco' %}">Fale Connosco</a>
+        </nav>
+    </header>
+
+    <main class="main-content">
         {% block content %}
         {% endblock %}
     </main>
-
 </body>
 </html>

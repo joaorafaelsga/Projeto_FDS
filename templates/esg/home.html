@@ -1,28 +1,11 @@
 {% extends 'esg/base.html' %}
 
-{% block title %}
-Início
-{% endblock %}
-
 {% block content %}
-
-    <h1>Somos a ESGfy</h1>
-
-    <p>
-        Bem-vindo à nossa plataforma de diagnóstico ESG.
-    </p>
-
-    <p>
-        A aplicação foi desenvolvida para auxiliar pequenas e médias
-        empresas na compreensão de práticas relacionadas aos pilares
-        Ambiental, Social e de Governança.
-    </p>
-
-    <h2>Conheça o projeto</h2>
-
-    <p>
-        Explore as informações sobre o projeto, conheça a equipe
-        responsável pelo desenvolvimento e entre em contato conosco.
-    </p>
-
+<section class="about-container" style="text-align: center;">
+    <div class="card" style="padding: 60px 20px;">
+        <h1 style="color: var(--esg-green); font-size: 36px; margin-bottom: 20px;">Bem-vindo à ESGfy</h1>
+        <p style="font-size: 18px; margin-bottom: 30px;">O seu parceiro na avaliação e implementação de práticas Ambientais, Sociais e de Governança corporativa.</p>
+        <a href="{% url 'projeto' %}" class="btn-primary">Conhecer o Projeto</a>
+    </div>
+</section>
 {% endblock %}

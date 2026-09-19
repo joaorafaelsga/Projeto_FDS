@@ -1,6 +1,6 @@
 :root {
-    --esg-green: #2E7D32;       /* Foco Ambiental */
-    --esg-blue: #1565C0;        /* Foco Governança */
+    --esg-green: #2E7D32;
+    --esg-blue: #1565C0;
     --bg-light: #F8FAF9;
     --text-dark: #2C3E50;
     --text-muted: #546E7A;
@@ -16,32 +16,72 @@
 }
 
 body {
-    font-family: 'Inter', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    font-family: 'Inter', sans-serif;
     background-color: var(--bg-light);
     color: var(--text-dark);
     line-height: 1.6;
 }
 
-/* Base para os Cards de Informação */
+/* Navegação */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #ffffff;
+    padding: 16px 32px;
+    box-shadow: var(--shadow-sm);
+    margin-bottom: 40px;
+}
+
+.navbar .logo {
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--esg-green);
+}
+
+.navbar nav a {
+    text-decoration: none;
+    color: var(--text-muted);
+    margin-left: 24px;
+    font-weight: 500;
+    transition: color 0.2s ease;
+}
+
+.navbar nav a:hover {
+    color: var(--esg-blue);
+}
+
+/* Estrutura Principal e Cards */
+.main-content {
+    padding: 0 20px 40px 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.about-container {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
 .card-container {
     display: flex;
     flex-wrap: wrap;
     gap: 20px;
-    padding: 20px;
+    padding: 20px 0;
 }
 
 .card {
     background: #ffffff;
     border-radius: var(--border-radius);
-    padding: 24px;
+    padding: 32px;
     box-shadow: var(--shadow-sm);
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
     flex: 1 1 300px;
 }
 
-.card:hover {
-    transform: translateY(-4px);
-    box-shadow: var(--shadow-md);
+.card h2 {
+    font-size: 28px;
+    margin-bottom: 16px;
+    color: var(--text-dark);
 }
 
 .card h3 {
@@ -49,39 +89,67 @@ body {
     margin-bottom: 12px;
 }
 
-/* Base para os Botões */
+/* Elementos da Equipa e Missão */
+.team-list {
+    list-style: none;
+    background-color: var(--bg-light);
+    border-radius: var(--border-radius);
+    padding: 16px 24px;
+    margin: 24px 0;
+    border: 1px solid #ECEFF1;
+}
+
+.team-list li {
+    display: flex;
+    justify-content: space-between;
+    padding: 12px 0;
+    border-bottom: 1px solid #E0E0E0;
+}
+
+.team-list li:last-child {
+    border-bottom: none;
+}
+
+.member-name { font-weight: 600; }
+.member-email { color: var(--text-muted); text-decoration: none; }
+.member-email:hover { color: var(--esg-blue); text-decoration: underline; }
+
+.mission-box {
+    background-color: #E8F5E9;
+    border-left: 5px solid var(--esg-green);
+    padding: 20px;
+    border-radius: 0 var(--border-radius) var(--border-radius) 0;
+    margin-top: 20px;
+}
+
+.mission-box p {
+    color: var(--esg-green);
+    font-weight: 600;
+    margin: 0;
+}
+
+/* Botões e Formulários */
 .btn-primary {
     background-color: var(--esg-green);
     color: #ffffff;
-    padding: 10px 20px;
+    padding: 12px 24px;
     border: none;
     border-radius: var(--border-radius);
     font-weight: 600;
     cursor: pointer;
-    transition: background-color 0.2s ease;
     text-decoration: none;
     display: inline-block;
+    transition: background-color 0.2s;
 }
 
-.btn-primary:hover {
-    background-color: #1B5E20;
-}
+.btn-primary:hover { background-color: #1B5E20; }
 
-/* Base para os Formulários */
-.form-group {
-    margin-bottom: 16px;
-}
-
+.form-group { margin-bottom: 16px; }
+label { display: block; margin-bottom: 8px; font-weight: 500; font-size: 14px; }
 .form-control {
     width: 100%;
     padding: 12px;
     border: 1px solid #CFD8DC;
     border-radius: var(--border-radius);
     font-family: inherit;
-}
-
-.form-control:focus {
-    outline: none;
-    border-color: var(--esg-blue);
-    box-shadow: 0 0 0 2px rgba(21, 101, 192, 0.2);
 }

@@ -40,9 +40,16 @@ Siga os passos abaixo para configurar e rodar o projeto localmente em sua máqui
 
 ### 2. Clonando o Repositório
 Abra o seu terminal e execute o comando abaixo para clonar o projeto:
-
-git clone [https://github.com/joaorafaelsga/Projeto_FDS.git](https://github.com/joaorafaelsga/Projeto_FDS.git)
+```bash
+git clone https://github.com/joaorafaelsga/Projeto_FDS.git
 cd Projeto_FDS
+python -m venv venv
+.\venv\Scripts\Activate
+pip install -r requirements.txt
+python manage.py makemigrations
+python manage.py migrate
+python manage.py runserver
+```
 
 ## Entregas do Projeto
 

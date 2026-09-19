@@ -30,6 +30,19 @@ Aplicação web focada para reforçar e ensinar a importancia da tecnica de  ESG
 
 </div>
 
+## 🚀 Guia de Instalação e Execução (Como Preparar o Ambiente)
+
+Siga os passos abaixo para configurar e rodar o projeto localmente em sua máquina:
+
+### 1. Pré-requisitos
+* Ter o **Python** (versão 3.10 ou superior) instalado.
+* Ter o **Git** instalado.
+
+### 2. Clonando o Repositório
+Abra o seu terminal e execute o comando abaixo para clonar o projeto:
+
+git clone [https://github.com/joaorafaelsga/Projeto_FDS.git](https://github.com/joaorafaelsga/Projeto_FDS.git)
+cd Projeto_FDS
 
 ## Entregas do Projeto
 

@@ -1,0 +1,87 @@
+:root {
+    --esg-green: #2E7D32;       /* Foco Ambiental */
+    --esg-blue: #1565C0;        /* Foco Governança */
+    --bg-light: #F8FAF9;
+    --text-dark: #2C3E50;
+    --text-muted: #546E7A;
+    --border-radius: 8px;
+    --shadow-sm: 0 2px 4px rgba(0,0,0,0.05);
+    --shadow-md: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Inter', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    background-color: var(--bg-light);
+    color: var(--text-dark);
+    line-height: 1.6;
+}
+
+/* Base para os Cards de Informação */
+.card-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    padding: 20px;
+}
+
+.card {
+    background: #ffffff;
+    border-radius: var(--border-radius);
+    padding: 24px;
+    box-shadow: var(--shadow-sm);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    flex: 1 1 300px;
+}
+
+.card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-md);
+}
+
+.card h3 {
+    color: var(--esg-green);
+    margin-bottom: 12px;
+}
+
+/* Base para os Botões */
+.btn-primary {
+    background-color: var(--esg-green);
+    color: #ffffff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: var(--border-radius);
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.btn-primary:hover {
+    background-color: #1B5E20;
+}
+
+/* Base para os Formulários */
+.form-group {
+    margin-bottom: 16px;
+}
+
+.form-control {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #CFD8DC;
+    border-radius: var(--border-radius);
+    font-family: inherit;
+}
+
+.form-control:focus {
+    outline: none;
+    border-color: var(--esg-blue);
+    box-shadow: 0 0 0 2px rgba(21, 101, 192, 0.2);
+}

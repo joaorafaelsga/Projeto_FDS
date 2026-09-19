@@ -12,6 +12,9 @@ SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-chave-de-desenvolvime
 DEBUG = os.environ.get('DEBUG', 'False') == 'True'
 ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', '127.0.0.1,localhost').split(',')
 
+# Permite que formulários funcionem com o HTTPS do Render
+CSRF_TRUSTED_ORIGINS = ['https://*.onrender.com']
+
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -81,7 +84,15 @@ TIME_ZONE = 'America/Recife'
 USE_I18N = True
 USE_TZ = True
 
+# ==========================================
+# ARQUIVOS ESTÁTICOS (CSS, JavaScript, Imagens)
+# ==========================================
 STATIC_URL = 'static/'
+
+# Diz ao Django para procurar a pasta "static" que vai criar na raiz do projeto
+STATICFILES_DIRS = [BASE_DIR / 'static']
+
+# Pasta para onde os arquivos estáticos serão enviados na produção (Render)
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 STORAGES = {

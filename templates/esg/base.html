@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>{% block title %}Diagnóstico ESG{% endblock %}</title>
+</head>
+
+<body>
+
+    <header>
+        <h1>Diagnóstico ESG</h1>
+
+        <nav>
+            <a href="{% url 'home' %}">Início</a>
+            <a href="{% url 'quem_somos' %}">Quem Somos</a>
+            <a href="{% url 'empresa' %}">Sobre a Empresa</a>
+            <a href="{% url 'projeto' %}">Sobre o Projeto</a>
+            <a href="{% url 'fale_conosco' %}">Fale Conosco</a>
+        </nav>
+    </header>
+
+    <main>
+        {% block content %}
+        {% endblock %}
+    </main>
+
+    <footer>
+        <p>Diagnóstico ESG</p>
+    </footer>
+
+</body>
+</html>

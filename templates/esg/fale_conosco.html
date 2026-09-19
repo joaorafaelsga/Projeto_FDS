@@ -1,0 +1,29 @@
+{% extends 'esg/base.html' %}
+
+{% block title %}
+Fale Conosco
+{% endblock %}
+
+{% block content %}
+
+    <h1>Fale Conosco</h1>
+
+    <p>
+        Entre em contato conosco através do formulário abaixo.
+    </p>
+
+    {% if messages %}
+        {% for message in messages %}
+            <p>{{ message }}</p>
+        {% endfor %}
+    {% endif %}
+
+    <form method="post">
+        {% csrf_token %}
+
+        {{ form.as_p }}
+
+        <button type="submit">Enviar</button>
+    </form>
+
+{% endblock %}

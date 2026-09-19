@@ -30,6 +30,10 @@ Aplicação web focada para reforçar e ensinar a importancia da tecnica de  ESG
 
 </div>
 
+## 🚀 Acesso à Aplicação (Deployment)
+A aplicação encontra-se hospedada e em funcionamento ativo na nuvem:
+* **URL de Produção:** [https://projeto-fds-qltf.onrender.com](https://projeto-fds-qltf.onrender.com)[cite: 6]
+
 ## 🚀 Guia de Instalação e Execução (Como Preparar o Ambiente)
 
 Siga os passos abaixo para configurar e rodar o projeto localmente em sua máquina:

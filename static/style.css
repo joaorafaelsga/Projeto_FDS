@@ -1,3 +1,6 @@
+/* ==========================================
+   1. VARIÁVEIS GLOBAIS E RESET
+   ========================================== */
 :root {
     --esg-green: #2E7D32;
     --esg-blue: #1565C0;
@@ -20,9 +23,23 @@ body {
     background-color: var(--bg-light);
     color: var(--text-dark);
     line-height: 1.6;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh; /* Garante que o rodapé fica sempre no fundo */
 }
 
-/* Navegação */
+/* ==========================================
+   2. ACESSIBILIDADE (Foco pelo teclado)
+   ========================================== */
+a:focus, button:focus, input:focus, textarea:focus {
+    outline: 3px solid var(--esg-blue);
+    outline-offset: 2px;
+    border-radius: 4px;
+}
+
+/* ==========================================
+   3. NAVEGAÇÃO SUPERIOR
+   ========================================== */
 .navbar {
     display: flex;
     justify-content: space-between;
@@ -35,7 +52,7 @@ body {
 
 .navbar .logo {
     font-size: 22px;
-    font-weight: 600;
+    font-weight: 700;
     color: var(--esg-green);
 }
 
@@ -51,11 +68,15 @@ body {
     color: var(--esg-blue);
 }
 
-/* Estrutura Principal e Cards */
+/* ==========================================
+   4. ESTRUTURA GERAL E CARTÕES (CARDS)
+   ========================================== */
 .main-content {
     padding: 0 20px 40px 20px;
     max-width: 1200px;
     margin: 0 auto;
+    flex: 1; /* Faz o conteúdo empurrar o rodapé para baixo */
+    width: 100%;
 }
 
 .about-container {
@@ -76,6 +97,7 @@ body {
     padding: 32px;
     box-shadow: var(--shadow-sm);
     flex: 1 1 300px;
+    animation: fadeUp 0.6s ease-out forwards;
 }
 
 .card h2 {
@@ -89,7 +111,57 @@ body {
     margin-bottom: 12px;
 }
 
-/* Elementos da Equipa e Missão */
+/* ==========================================
+   5. DESTAQUES DA HOME (HERO SECTION) E ANIMAÇÕES
+   ========================================== */
+@keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.hero-section {
+    background: linear-gradient(135deg, #1B5E20 0%, #2E7D32 100%);
+    border-radius: var(--border-radius);
+    padding: 80px 40px;
+    text-align: center;
+    color: white;
+    box-shadow: var(--shadow-md);
+    margin-bottom: 40px;
+    animation: fadeUp 0.6s ease-out forwards;
+}
+
+.hero-section h1 {
+    font-size: 42px;
+    margin-bottom: 20px;
+    color: white;
+    font-weight: 700;
+}
+
+.hero-section p {
+    font-size: 20px;
+    max-width: 600px;
+    margin: 0 auto 32px auto;
+    color: #E8F5E9;
+}
+
+/* ==========================================
+   6. ÍCONES E COMPONENTES ESPECÍFICOS
+   ========================================== */
+.icon-circle {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+.icon-green { background-color: #E8F5E9; color: var(--esg-green); }
+.icon-blue { background-color: #E3F2FD; color: var(--esg-blue); }
+.icon-dark { background-color: #ECEFF1; color: var(--text-dark); }
+
 .team-list {
     list-style: none;
     background-color: var(--bg-light);
@@ -128,7 +200,9 @@ body {
     margin: 0;
 }
 
-/* Botões e Formulários */
+/* ==========================================
+   7. BOTÕES E FORMULÁRIOS
+   ========================================== */
 .btn-primary {
     background-color: var(--esg-green);
     color: #ffffff;
@@ -144,6 +218,22 @@ body {
 
 .btn-primary:hover { background-color: #1B5E20; }
 
+.btn-white {
+    background-color: white;
+    color: var(--esg-green);
+    padding: 14px 28px;
+    border-radius: 30px;
+    font-weight: 600;
+    text-decoration: none;
+    display: inline-block;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.btn-white:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+}
+
 .form-group { margin-bottom: 16px; }
 label { display: block; margin-bottom: 8px; font-weight: 500; font-size: 14px; }
 .form-control {
@@ -152,4 +242,78 @@ label { display: block; margin-bottom: 8px; font-weight: 500; font-size: 14px; }
     border: 1px solid #CFD8DC;
     border-radius: var(--border-radius);
     font-family: inherit;
+}
+
+/* ==========================================
+   8. RODAPÉ (FOOTER)
+   ========================================== */
+.site-footer {
+    background-color: var(--text-dark);
+    color: #ffffff;
+    text-align: center;
+    padding: 32px 20px;
+    margin-top: 60px;
+}
+
+.site-footer p {
+    color: #CFD8DC;
+    font-size: 14px;
+    margin-bottom: 16px;
+}
+
+.social-links a {
+    color: #ffffff;
+    margin: 0 12px;
+    font-size: 24px;
+    transition: color 0.2s, transform 0.2s;
+    display: inline-block;
+}
+
+.social-links a:hover {
+    color: var(--esg-green);
+    transform: translateY(-3px);
+}
+
+/* ==========================================
+   9. RESPONSIVIDADE (TELEMÓVEIS E TABLETS)
+   ========================================== */
+@media (max-width: 768px) {
+    /* Ajusta o menu para ecrãs pequenos */
+    .navbar {
+        flex-direction: column;
+        padding: 16px;
+    }
+    
+    .navbar nav {
+        margin-top: 16px;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 16px;
+    }
+    
+    .navbar nav a {
+        margin-left: 0;
+        font-size: 14px;
+    }
+    
+    /* Reduz o banner principal em telemóveis */
+    .hero-section {
+        padding: 40px 20px;
+    }
+    
+    .hero-section h1 {
+        font-size: 32px;
+    }
+    
+    .hero-section p {
+        font-size: 16px;
+    }
+    
+    /* Ajusta a lista da equipa para não quebrar a tela */
+    .team-list li {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+    }
 }

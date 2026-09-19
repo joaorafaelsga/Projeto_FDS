@@ -1,15 +1,18 @@
 {% load static %}
 <!DOCTYPE html>
-<html lang="pt-pt">
+<html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Diagnóstico ESG para PMEs</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-    <!-- O caminho foi ajustado para corresponder ao seu static/style.css -->
+    <!-- Fontes e Ícones -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- CSS Principal -->
     <link rel="stylesheet" href="{% static 'style.css' %}">
 </head>
 <body>
+    <!-- Barra de Navegação Superior -->
     <header class="navbar">
         <div class="logo">ESGfy</div>
         <nav>
@@ -21,9 +24,22 @@
         </nav>
     </header>
 
+    <!-- Conteúdo Principal Dinâmico -->
     <main class="main-content">
         {% block content %}
         {% endblock %}
     </main>
+
+    <!-- Rodapé Global -->
+    <footer class="site-footer">
+        <div class="footer-content">
+            <p>&copy; 2026 ESGfy. Todos os direitos reservados.</p>
+            <div class="social-links">
+                <!-- Pode substituir os "#" pelos links reais das redes sociais no futuro -->
+                <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a>
+                <a href="#" aria-label="GitHub"><i class="fab fa-github"></i></a>
+            </div>
+        </div>
+    </footer>
 </body>
 </html>

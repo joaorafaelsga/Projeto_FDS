@@ -3,8 +3,11 @@
 {% block content %}
 <section class="about-container" style="max-width: 600px;">
     <div class="card">
-        <h2>Fale Connosco</h2>
-        <p style="margin-bottom: 24px; color: var(--text-muted);">Pretende otimizar as práticas da sua empresa ou saber mais sobre o nosso projeto? Envie-nos uma mensagem.</p>
+        <div class="icon-circle icon-dark" style="margin: 0 auto 20px auto;">
+            <i class="fas fa-envelope"></i>
+        </div>
+        <h2 style="text-align: center;">Fale Connosco</h2>
+        <p style="margin-bottom: 30px; text-align: center; color: var(--text-muted);">Pretende otimizar as práticas da sua empresa ou saber mais sobre o nosso projeto? Envie-nos uma mensagem.</p>
         
         <form action="" method="POST">
             {% csrf_token %}
@@ -20,7 +23,9 @@
                 <label for="id_mensagem">Mensagem</label>
                 <textarea id="id_mensagem" name="mensagem" class="form-control" rows="5" required placeholder="Como podemos ajudar a sua PME?"></textarea>
             </div>
-            <button type="submit" class="btn-primary" style="width: 100%; margin-top: 10px;">Enviar Mensagem</button>
+            <button type="submit" class="btn-primary" style="width: 100%; margin-top: 10px;">
+                <i class="fas fa-paper-plane" style="margin-right: 8px;"></i> Enviar Mensagem
+            </button>
         </form>
     </div>
 </section>

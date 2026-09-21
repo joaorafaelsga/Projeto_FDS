@@ -29,15 +29,6 @@ Aplicação web focada para reforçar e ensinar a importancia da tecnica de  ESG
 |Rafael Costa e Silva | **rcs9@cesar.school** |
 
 </div>
-
-## 🚀 Acesso à Aplicação (Deployment)
-A aplicação encontra-se hospedada e em funcionamento ativo na nuvem:
-* **URL de Produção:** [https://projeto-fds-qltf.onrender.com](https://projeto-fds-qltf.onrender.com)
-
-## 🎥 Vídeos de Demonstração e Explicação
-* **Vídeo 1 (Demonstração da Aplicação na Nuvem):** [https://drive.google.com/file/d/1l61M2odf9BT3m0vJH3tKS8tl2jH04scy/view?usp=sharing]
-* **Vídeo 2 (Explicação do Código e Arquitetura):** [https://drive.google.com/file/d/1okzUuRTyqXOsbk7YJ1Jb5-sAK5J_dgzk/view?usp=sharing]
-
 ## 🚀 Guia de Instalação e Execução (Como Preparar o Ambiente)
 
 Siga os passos abaixo para configurar e rodar o projeto localmente em sua máquina:
@@ -65,10 +56,18 @@ python manage.py runserver
 
 - **[Documento de Análise de Competidores](https://github.com/joaorafaelsga/Projeto_FDS/blob/main/Analise_de_competidores.md)
 
-- **BenchMark da Análise de Competidores:**
 
 ###  Entrega 2:
-- *Conteúdo indisponível temporariamente.*
+- *
+## 🚀 Acesso à Aplicação (Deployment)
+A aplicação encontra-se hospedada e em funcionamento ativo na nuvem:
+* **URL de Produção:** [https://projeto-fds-qltf.onrender.com](https://projeto-fds-qltf.onrender.com)
+
+## 🎥 Vídeos de Demonstração e Explicação
+* **Vídeo 1 (Demonstração da Aplicação na Nuvem):** [https://drive.google.com/file/d/1l61M2odf9BT3m0vJH3tKS8tl2jH04scy/view?usp=sharing]
+* **Vídeo 2 (Explicação do Código e Arquitetura):** [https://drive.google.com/file/d/1okzUuRTyqXOsbk7YJ1Jb5-sAK5J_dgzk/view?usp=sharing]
+
+*
 
 ###  Entrega 3:
 - *Conteúdo indisponível temporariamente.*

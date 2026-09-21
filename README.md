@@ -66,8 +66,8 @@ A aplicação encontra-se hospedada e em funcionamento ativo na nuvem:
 ## 🎥 Vídeos de Demonstração e Explicação
 * **Vídeo 1 (Demonstração da Aplicação na Nuvem):** [https://youtu.be/JiSO4DgVdYI]
 * **Vídeo 2 (Explicação do Código e Arquitetura):** [https://youtu.be/4Kz_H4hgz3Q?si=vF9Zc03DT8fbHM0w]
+* **Sprint 2** **![Quadro do backlog](assets/Backlog%20sprint%202.jpeg)** 
 
-*
 
 ###  Entrega 3:
 - *Conteúdo indisponível temporariamente.*

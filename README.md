@@ -64,8 +64,8 @@ A aplicação encontra-se hospedada e em funcionamento ativo na nuvem:
 * **URL de Produção:** [https://projeto-fds-qltf.onrender.com](https://projeto-fds-qltf.onrender.com)
 
 ## 🎥 Vídeos de Demonstração e Explicação
-* **Vídeo 1 (Demonstração da Aplicação na Nuvem):** [https://drive.google.com/file/d/1l61M2odf9BT3m0vJH3tKS8tl2jH04scy/view?usp=sharing]
-* **Vídeo 2 (Explicação do Código e Arquitetura):** [https://drive.google.com/file/d/1okzUuRTyqXOsbk7YJ1Jb5-sAK5J_dgzk/view?usp=sharing]
+* **Vídeo 1 (Demonstração da Aplicação na Nuvem):** [https://youtu.be/JiSO4DgVdYI]
+* **Vídeo 2 (Explicação do Código e Arquitetura):** [https://youtu.be/4Kz_H4hgz3Q?si=vF9Zc03DT8fbHM0w]
 
 *
 

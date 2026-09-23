@@ -58,7 +58,6 @@ python manage.py runserver
 
 
 ###  Entrega 2:
-- *
 ## 🚀 Acesso à Aplicação (Deployment)
 A aplicação encontra-se hospedada e em funcionamento ativo na nuvem:
 * **URL de Produção:** [https://projeto-fds-qltf.onrender.com](https://projeto-fds-qltf.onrender.com)

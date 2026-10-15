@@ -69,7 +69,8 @@ A aplicação encontra-se hospedada e em funcionamento ativo na nuvem:
 
 
 ###  Entrega 3:
-- *Conteúdo indisponível temporariamente.*
+### 📄 Histórias de Usuário e BDD
+* 🔗 **[Documento de Histórias de Usuário e BDD](./HISTORIAS.md)**
 
 ###  Entrega 4:
 - *Conteúdo indisponível temporariamente.*

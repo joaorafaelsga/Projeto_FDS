@@ -71,6 +71,28 @@ A aplicação encontra-se hospedada e em funcionamento ativo na nuvem:
 ###  Entrega 3:
 ### 📄 Histórias de Usuário e BDD
 * 🔗 **[Documento de Histórias de Usuário e BDD](./HISTORIAS.md)**
+<table>
+  <tr>
+    <td width="33%" valign="top" bgcolor="#fff9c4">
+      <strong>US02 — Fale Conosco</strong>
+      <p><strong>Como</strong> usuário ou visitante da plataforma,<br>
+      <strong>Quero</strong> enviar mensagens pelo formulário Fale Conosco,<br>
+      <strong>Para</strong> obter atendimento e registrar feedbacks.</p>
+    </td>
+    <td width="33%" valign="top" bgcolor="#e3f2fd">
+      <strong>US03 — Navegação institucional</strong>
+      <p><strong>Como</strong> visitante da plataforma,<br>
+      <strong>Quero</strong> acessar as páginas Quem Somos, Sobre a Empresa e Sobre o Projeto,<br>
+      <strong>Para</strong> conhecer a metodologia, os objetivos do ESGfy e a equipe.</p>
+    </td>
+    <td width="33%" valign="top" bgcolor="#fce4ec">
+      <strong>US04 — Diagnóstico ESG</strong>
+      <p><strong>Como</strong> gestor da empresa,<br>
+      <strong>Quero</strong> visualizar perguntas e diretrizes dos pilares Ambiental, Social e Governança,<br>
+      <strong>Para</strong> identificar em quais pilares a empresa pode melhorar.</p>
+    </td>
+  </tr>
+</table>
 
 ###  Entrega 4:
 - *Conteúdo indisponível temporariamente.*

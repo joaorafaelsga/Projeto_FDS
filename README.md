@@ -94,12 +94,19 @@ A aplicação encontra-se hospedada e em funcionamento ativo na nuvem:
   </tr>
 </table>
 
-###  Entrega 4:
+### 📋 Jira — Backlog e Sprint 03
 
+Backlog do projeto
+![backlog 3](assets/backlog3.png)
 
+Quadro da Sprint 03
+![sprint 3](assets/backlog3.png)
+
+### 🐞 Bug Tracker — GitHub Issues
 Acompanhamento e gestão de tarefas do projeto:
 
 ![Gestão de Issues - Visão Geral](assets/issues1.png)
 
 ![Gestão de Issues - Detalhes](assets/issues2.png)
+
 

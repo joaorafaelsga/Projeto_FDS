@@ -95,7 +95,11 @@ A aplicação encontra-se hospedada e em funcionamento ativo na nuvem:
 </table>
 
 ###  Entrega 4:
-- *Conteúdo indisponível temporariamente.*
 
----
+
+Acompanhamento e gestão de tarefas do projeto:
+
+![Gestão de Issues - Visão Geral](assets/issues1.png)
+
+![Gestão de Issues - Detalhes](assets/issues2.png)
 

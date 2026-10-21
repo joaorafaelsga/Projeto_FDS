@@ -9,20 +9,27 @@
         <h2 style="text-align: center;">Fale Connosco</h2>
         <p style="margin-bottom: 30px; text-align: center; color: var(--text-muted);">Pretende otimizar as práticas da sua empresa ou saber mais sobre o nosso projeto? Envie-nos uma mensagem.</p>
         
-        <form action="" method="POST">
+        <!-- Bloco para mostrar as mensagens de Sucesso ou Erro (Cenários 1 e 2 da US02) -->
+        {% if messages %}
+            {% for message in messages %}
+                <div style="background-color: {% if message.tags == 'error' %}#FFEBEE{% else %}#E8F5E9{% endif %}; color: {% if message.tags == 'error' %}#C62828{% else %}var(--esg-green){% endif %}; padding: 16px; border-radius: var(--border-radius); margin-bottom: 24px; text-align: center; font-weight: 600; border: 1px solid {% if message.tags == 'error' %}#FFCDD2{% else %}#C8E6C9{% endif %};">
+                    <i class="fas {% if message.tags == 'error' %}fa-exclamation-circle{% else %}fa-check-circle{% endif %}" style="margin-right: 8px;"></i> {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+        
+        <!-- Formulário dinâmico que puxa os campos e as validações do forms.py -->
+        <form method="POST">
             {% csrf_token %}
-            <div class="form-group">
-                <label for="id_nome">Nome</label>
-                <input type="text" id="id_nome" name="nome" class="form-control" required placeholder="O seu nome completo">
-            </div>
-            <div class="form-group">
-                <label for="id_email">E-mail</label>
-                <input type="email" id="id_email" name="email" class="form-control" required placeholder="endereço@empresa.com">
-            </div>
-            <div class="form-group">
-                <label for="id_mensagem">Mensagem</label>
-                <textarea id="id_mensagem" name="mensagem" class="form-control" rows="5" required placeholder="Como podemos ajudar a sua PME?"></textarea>
-            </div>
+            {% for field in form %}
+                <div class="form-group">
+                    <label for="{{ field.id_for_label }}">{{ field.label }} {% if field.field.required %}<span style="color: #C62828;">*</span>{% endif %}</label>
+                    {{ field }}
+                    {% if field.errors %}
+                        <span style="color: #C62828; font-size: 13px; font-weight: 500; display: block; margin-top: 4px;"><i class="fas fa-exclamation-triangle"></i> {{ field.errors.0 }}</span>
+                    {% endif %}
+                </div>
+            {% endfor %}
             <button type="submit" class="btn-primary" style="width: 100%; margin-top: 10px;">
                 <i class="fas fa-paper-plane" style="margin-right: 8px;"></i> Enviar Mensagem
             </button>

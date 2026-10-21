@@ -2,9 +2,10 @@ from django.db import models
 
 
 class Empresa(models.Model):
-    nome = models.CharField(max_length=150)
+    nome = models.CharField(max_length=150, verbose_name="Nome da Empresa")
     setor = models.CharField(max_length=100)
     porte = models.CharField(max_length=50)
+    email_contato = models.EmailField(verbose_name="E-mail de Contato", default="contato@empresa.com")
     criado_em = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):

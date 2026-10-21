@@ -1,0 +1,39 @@
+{% extends 'esg/base.html' %}
+
+{% block content %}
+<section class="about-container" style="max-width: 600px;">
+    <div class="card">
+        <div class="icon-circle icon-blue" style="margin: 0 auto 20px auto;">
+            <i class="fas fa-building"></i>
+        </div>
+        <h2 style="text-align: center;">Registo de Empresa</h2>
+        <p style="margin-bottom: 30px; text-align: center; color: var(--text-muted);">Mantenha o perfil da sua organização atualizado na plataforma ESG.</p>
+        
+        {% if messages %}
+            {% for message in messages %}
+                <div style="background-color: {% if message.tags == 'error' %}#FFEBEE{% else %}#E8F5E9{% endif %}; color: {% if message.tags == 'error' %}#C62828{% else %}var(--esg-green){% endif %}; padding: 16px; border-radius: var(--border-radius); margin-bottom: 24px; text-align: center; font-weight: 600; border: 1px solid {% if message.tags == 'error' %}#FFCDD2{% else %}#C8E6C9{% endif %};">
+                    <i class="fas {% if message.tags == 'error' %}fa-exclamation-circle{% else %}fa-check-circle{% endif %}" style="margin-right: 8px;"></i> {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+
+        <form method="POST">
+            {% csrf_token %}
+            {% for field in form %}
+                <div class="form-group">
+                    <label for="{{ field.id_for_label }}">{{ field.label }} {% if field.field.required %}<span style="color: #C62828;">*</span>{% endif %}</label>
+                    {{ field }}
+                    {% if field.errors %}
+                        <span style="color: #C62828; font-size: 13px; font-weight: 500; display: block; margin-top: 4px;">
+                            <i class="fas fa-exclamation-triangle"></i> {{ field.errors.0 }}
+                        </span>
+                    {% endif %}
+                </div>
+            {% endfor %}
+            <button type="submit" class="btn-primary" style="width: 100%; margin-top: 10px;">
+                <i class="fas fa-save" style="margin-right: 8px;"></i> Guardar Dados
+            </button>
+        </form>
+    </div>
+</section>
+{% endblock %}

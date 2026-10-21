@@ -16,7 +16,8 @@ def fale_conosco(request):
             messages.success(request, 'Mensagem enviada com sucesso!')
             return redirect('fale_conosco')
         else:
-            messages.error(request, 'Erro no envio. Verifique se o e-mail ou os campos estão corretos.')
+            # Mensagem de erro atualizada para combinar com o visual em vermelho do HTML
+            messages.error(request, 'O formulário contém erros. Por favor, verifique os campos destacados.')
 
     else:
         form = ComentarioForm()

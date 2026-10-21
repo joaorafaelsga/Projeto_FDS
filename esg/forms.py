@@ -1,7 +1,5 @@
 from django import forms
-
 from .models import Comentario, Empresa
-
 
 class EmpresaForm(forms.ModelForm):
     class Meta:
@@ -14,14 +12,22 @@ class EmpresaForm(forms.ModelForm):
             'email_contato': forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'contato@empresa.com'}),
         }
 
-
 class ComentarioForm(forms.ModelForm):
     class Meta:
         model = Comentario
         fields = ["nome", "email", "assunto", "mensagem"]
         widgets = {
-            'nome': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Seu nome completo'}),
-            'email': forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'seu@email.com'}),
-            'assunto': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Assunto da mensagem'}),
-            'mensagem': forms.Textarea(attrs={'class': 'form-control', 'rows': 5, 'placeholder': 'Sua mensagem'}),
+            'nome': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Seu nome completo', 'required': True}),
+            'email': forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'seu@email.com', 'required': True}),
+            'assunto': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Assunto da mensagem', 'required': True}),
+            'mensagem': forms.Textarea(attrs={'class': 'form-control', 'rows': 5, 'placeholder': 'Sua mensagem', 'required': True}),
+        }
+        error_messages = {
+            'email': {
+                'invalid': 'Por favor, insira um e-mail com formato válido (ex: usuario@dominio.com).',
+                'required': 'O campo de e-mail é obrigatório.'
+            },
+            'nome': {'required': 'O nome é obrigatório.'},
+            'assunto': {'required': 'O assunto não pode ficar em branco.'},
+            'mensagem': {'required': 'Por favor, escreva a sua mensagem.'}
         }

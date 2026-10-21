@@ -57,40 +57,59 @@ Este documento apresenta as Histórias de Usuário e os cenários BDD para a pla
   * **Então** o sistema deve carregar os detalhes da equipe de desenvolvimento sem erros de rota.
 
 ---
-
 ## [US04] Visualização do Diagnóstico por Pilares ESG
 **Como** gestor da empresa,  
 **Quero** visualizar perguntas e diretrizes divididas pelos pilares Ambiental, Social e Governança,  
-**Para** identificar em qual pilar a empresa possui maiores fragilidades.
+**Para** identificar em qual pilar a empresa possui maiores fragilidades e responder de forma organizada.
 
 ### Cenários de Aceitação (BDD):
-* **Cenário 1: Filtro de perguntas por pilar**
-  * **Dado que** o gestor acessou a seção de Diagnóstico,
-  * **Quando** escolhe o pilar "Ambiental",
-  * **Então** o sistema lista apenas os tópicos e perguntas relacionados a práticas ambientais.
+- **Cenário 1: Filtro de perguntas por pilar**
+  - **Dado que** o gestor acessou a seção de Diagnóstico,
+  - **Quando** seleciona a aba do pilar "Ambiental",
+  - **Então** o sistema exibe exclusivamente as perguntas relacionadas às práticas ambientais.
+
+- **Cenário 2: Indicador de progresso por pilar**
+  - **Dado que** o gestor está a preencher o questionário,
+  - **Quando** responde a algumas perguntas de um pilar,
+  - **Então** o sistema deve exibir um indicador de progresso (ex: "3/10 respondidas") para a aba daquele pilar.
 
 ---
 
 ## [US05] Questionário de Avaliação de Maturidade
 **Como** gestor da empresa,  
-**Quero** responder a um questionário de avaliação com opções objetivas,  
+**Quero** responder a um questionário de avaliação com opções objetivas pontuadas,  
 **Para** obter a nota inicial de maturidade sustentável da minha organização.
 
 ### Cenários de Aceitação (BDD):
-* **Cenário 1: Processamento da nota de maturidade**
-  * **Dado que** o gestor respondeu a todas as perguntas do questionário,
-  * **Quando** clica em "Submeter Avaliação",
-  * **Então** o sistema calcula a pontuação e exibe o nível de maturidade atingido.
+- **Cenário 1: Processamento da nota de maturidade**
+  - **Dado que** o gestor respondeu a todas as perguntas do questionário,
+  - **Quando** clica em "Submeter Avaliação",
+  - **Então** o sistema calcula a pontuação total e exibe o nível de maturidade alcançado (ex: Iniciante, Intermediário, Avançado).
+
+- **Cenário 2: Tentativa de submissão com perguntas em branco**
+  - **Dado que** o gestor não respondeu a todas as perguntas obrigatórias,
+  - **Quando** tenta clicar em "Submeter Avaliação",
+  - **Então** o sistema impede o envio, rola a página para a pergunta pendente e destaca-a com uma mensagem de aviso.
 
 ---
 
 ## [US06] Emissão de Relatório e Recomendações
 **Como** gestor da empresa,  
-**Quero** visualizar um relatório final com sugestões de melhoria com base no diagnóstico,  
-**Para** elaborar um plano de ação para adequação às normas ESG.
+**Quero** visualizar um relatório final com sugestões de melhoria com base na nota do diagnóstico,  
+**Para** elaborar um plano de ação para adequação às práticas ESG.
 
 ### Cenários de Aceitação (BDD):
-* **Cenário 1: Exibição do plano de ação recomendado**
-  * **Dado que** a avaliação apontou nota baixa em Governança,
-  * **Quando** o relatório final é gerado,
-  * **Então** o sistema apresenta recomendações prioritárias de compliance e transparência.
+- **Cenário 1: Exibição do plano de ação direcionado**
+  - **Dado que** a avaliação da empresa obteve nota baixa no pilar de Governança,
+  - **Quando** o relatório final é gerado,
+  - **Então** o sistema apresenta recomendações prioritárias voltadas para compliance, ética e transparência corporativa.
+
+- **Cenário 2: Visão geral e comparativa dos pilares**
+  - **Dado que** o gestor acessa o relatório final,
+  - **Quando** visualiza a página de resultados,
+  - **Então** o sistema deve apresentar um gráfico ou tabela comparando a pontuação obtida nos três pilares (E, S, e G).
+
+- **Cenário 3: Impressão ou Exportação do Relatório**
+  - **Dado que** o gestor está na tela de relatório final,
+  - **Quando** clica na opção "Imprimir / Salvar PDF",
+  - **Então** o sistema formata a página de maneira limpa (sem menus de navegação) para facilitar a impressão do plano de ação.

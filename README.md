@@ -69,6 +69,14 @@ A aplicação encontra-se hospedada e em funcionamento ativo na nuvem:
 
 
 ###  Entrega 3:
+## 🚀 Acesso à Aplicação (Deployment)
+A aplicação encontra-se hospedada e em funcionamento ativo na nuvem:
+* **URL de Produção:** [https://projeto-fds-qltf.onrender.com](https://projeto-fds-qltf.onrender.com)
+
+## 🎥 Vídeos de Demonstração e Explicação
+* **Vídeo 1 (Demonstração da Aplicação na Nuvem):** [https://youtu.be/YF8ENkpc_fo](https://youtu.be/YF8ENkpc_fo)
+* **Vídeo 2 (Explicação do Código e Arquitetura):** [https://youtu.be/j4zs3XJEbys](https://youtu.be/j4zs3XJEbys)
+
 ### 📄 Histórias de Usuário e BDD
 * 🔗 **[Documento de Histórias de Usuário e BDD](./HISTORIAS.md)**
 <table>

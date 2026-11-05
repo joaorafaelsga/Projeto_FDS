@@ -118,3 +118,6 @@ Acompanhamento e gestão de tarefas do projeto:
 ![Gestão de Issues - Detalhes](assets/issues2.png)
 
 
+###  Entrega 4:
+
+* **[Documento Guia de Contribuição e Versionamento](CONTRIBUTING.md)**

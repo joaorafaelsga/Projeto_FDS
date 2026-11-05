@@ -151,7 +151,3 @@ Acompanhamento e gestão de tarefas do projeto:
     </td>
   </tr>
 </table>
-
-Para experimentar a avaliação, execute `python manage.py migrate`, inicie o servidor e acesse **Avaliação ESG** no menu. Cadastre uma empresa caso ainda não exista nenhuma. Depois de submeter a avaliação, o resultado apresenta o comparativo e o plano de ação. Clique em **Imprimir / Salvar PDF** para imprimir o relatório ou escolher o destino PDF no navegador. Para consultar avaliações anteriores, acesse **Histórico ESG**, selecione a empresa e clique em **Consultar histórico**. Use **Ver relatório** para abrir uma avaliação salva.
-
-Validação automatizada: `python manage.py test` executa os testes de pontuação, formulário, integração e os cenários Selenium, incluindo envio completo, destaque de perguntas pendentes, recomendações, exportação do relatório em PDF e consulta do histórico por empresa. Os testes de navegador exigem Chrome e um driver compatível, conforme a configuração em `esg/tests_e2e.py`.

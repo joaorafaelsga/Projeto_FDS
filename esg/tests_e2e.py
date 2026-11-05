@@ -2,9 +2,9 @@ from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from django.test import override_settings
 from selenium import webdriver
 from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support.ui import Select, WebDriverWait
 
-from .models import Comentario, Empresa
+from .models import Comentario, Diagnostico, Empresa, Pergunta
 
 
 @override_settings(STORAGES={
@@ -104,3 +104,55 @@ class TestesE2E(StaticLiveServerTestCase):
         self.abrir("/cadastrar-empresa/")
         self.enviar_formulario("nome")
         self.assertEqual(Empresa.objects.count(), 0)
+
+    # ---------- Avaliação de maturidade ----------
+
+    def preparar_avaliacao(self):
+        empresa = Empresa.objects.create(
+            nome="Empresa Sustentável", setor="Serviços", porte="Pequena",
+            email_contato="contato@sustentavel.com",
+        )
+        Pergunta.objects.all().delete()
+        perguntas = [
+            Pergunta.objects.create(texto=f"Prática {pilar}", pilar=pilar)
+            for pilar in Pergunta.Pilar.values
+        ]
+        self.abrir("/avaliacao/")
+        Select(self.driver.find_element(By.NAME, "empresa")).select_by_value(str(empresa.pk))
+        return perguntas
+
+    def test_avaliacao_calcula_niveis_no_navegador(self):
+        for pontuacao, nivel in [(0, "Iniciante"), (1, "Intermediário"), (2, "Avançado")]:
+            with self.subTest(pontuacao=pontuacao):
+                perguntas = self.preparar_avaliacao()
+                for pergunta in perguntas:
+                    self.driver.find_element(
+                        By.CSS_SELECTOR,
+                        f'input[name="pergunta_{pergunta.pk}"][value="{pontuacao}"]',
+                    ).click()
+                self.driver.find_element(By.CSS_SELECTOR, ".avaliacao button[type=submit]").click()
+                self.esperar_texto("Resultado da Avaliação de Maturidade")
+                self.assertIn(nivel, self.driver.page_source)
+                diagnostico = Diagnostico.objects.latest("pk")
+                self.assertEqual(diagnostico.pontuacao_total, pontuacao * len(perguntas))
+                self.assertEqual(diagnostico.respostas.count(), len(perguntas))
+                # O próximo caso usa outro conjunto de perguntas.
+                Diagnostico.objects.all().delete()
+
+    def test_avaliacao_incompleta_destaca_e_foca_pergunta_pendente(self):
+        perguntas = self.preparar_avaliacao()
+        for pergunta in perguntas[1:]:
+            self.driver.find_element(
+                By.CSS_SELECTOR, f'input[name="pergunta_{pergunta.pk}"][value="1"]'
+            ).click()
+        self.driver.find_element(By.CSS_SELECTOR, ".avaliacao button[type=submit]").click()
+        self.esperar_texto("Responda esta pergunta")
+        WebDriverWait(self.driver, 5).until(
+            lambda driver: driver.switch_to.active_element.get_attribute("name")
+            == f"pergunta_{perguntas[0].pk}"
+        )
+        for pergunta in perguntas[1:]:
+            self.assertTrue(self.driver.find_element(
+                By.CSS_SELECTOR, f'input[name="pergunta_{pergunta.pk}"][value="1"]'
+            ).is_selected())
+        self.assertFalse(Diagnostico.objects.exists())

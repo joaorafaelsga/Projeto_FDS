@@ -296,3 +296,60 @@ label { display: block; margin-bottom: 8px; font-weight: 500; font-size: 14px; }
         gap: 8px;
     }
 }
+
+/* Questionário de avaliação de maturidade */
+.avaliacao-instrucoes {
+    margin: 20px 0 28px;
+    color: var(--text-muted);
+}
+
+.avaliacao-pilar {
+    margin: 28px 0;
+}
+
+.avaliacao-pergunta {
+    min-width: 0;
+    padding: 16px;
+    margin-bottom: 20px;
+    border: 1px solid #CFD8DC;
+    border-radius: var(--border-radius);
+}
+
+.avaliacao-pergunta legend {
+    max-width: 100%;
+    padding: 0 8px;
+    font-weight: 600;
+}
+
+.avaliacao-opcao {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px;
+    cursor: pointer;
+}
+
+.avaliacao-opcao input {
+    flex-shrink: 0;
+    accent-color: var(--esg-green);
+}
+
+.avaliacao-aviso {
+    padding: 16px;
+    margin: 20px 0;
+    background-color: #FFEBEE;
+    color: #C62828;
+    border-radius: var(--border-radius);
+}
+
+.avaliacao-erro {
+    margin-top: 8px;
+    color: #C62828;
+    font-size: 14px;
+}
+
+.avaliacao .campo-com-erro {
+    border: 2px solid #C62828;
+    border-radius: var(--border-radius);
+    padding: 16px;
+}

@@ -1,4 +1,7 @@
-from django.test import TestCase
+from unittest.mock import patch
+
+from django.test import Client, TestCase, override_settings
+from django.urls import reverse
 
 from .forms import AvaliacaoForm
 from .models import Diagnostico, Empresa, Pergunta, Resposta
@@ -92,3 +95,78 @@ class PontuacaoDiagnosticoTests(AvaliacaoTestCase):
         diagnostico = Diagnostico.objects.create(empresa=self.empresa)
         with self.assertRaises(ValueError):
             diagnostico.calcular_pontuacao()
+
+
+@override_settings(STORAGES={
+    "default": {"BACKEND": "django.core.files.storage.FileSystemStorage"},
+    "staticfiles": {"BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage"},
+})
+class AvaliacaoViewTests(AvaliacaoTestCase):
+    def test_exibe_questionario_agrupado_por_pilar(self):
+        response = self.client.get(reverse("avaliacao"))
+        self.assertEqual(response.status_code, 200)
+        for pergunta in self.perguntas:
+            self.assertContains(response, pergunta.texto)
+            self.assertContains(response, pergunta.get_pilar_display())
+        self.assertContains(response, "Submeter Avaliação")
+
+    def test_salva_respostas_e_exibe_resultado_da_empresa(self):
+        response = self.client.post(reverse("avaliacao"), self.dados_avaliacao(), follow=True)
+        self.assertRedirects(response, reverse("resultado_avaliacao"))
+        diagnostico = Diagnostico.objects.get()
+        self.assertEqual(diagnostico.empresa, self.empresa)
+        self.assertEqual(diagnostico.respostas.count(), 3)
+        self.assertEqual(diagnostico.pontuacao_total, 3)
+        self.assertContains(response, "Intermediário")
+        self.assertContains(response, "3 de 6 pontos")
+        self.assertContains(response, self.empresa.nome)
+        for resposta in diagnostico.respostas.all():
+            self.assertEqual(resposta.texto, "Em implementação")
+        self.client.get(reverse("resultado_avaliacao"))
+        self.assertEqual(Diagnostico.objects.count(), 1)
+
+    def test_pergunta_pendente_nao_cria_diagnostico_parcial(self):
+        dados = self.dados_avaliacao()
+        campo = f"pergunta_{self.perguntas[0].pk}"
+        del dados[campo]
+        response = self.client.post(reverse("avaliacao"), dados)
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "campo-com-erro")
+        self.assertContains(response, "Responda esta pergunta")
+        self.assertEqual(response.context["form"]["empresa"].value(), str(self.empresa.pk))
+        self.assertFalse(Diagnostico.objects.exists())
+        self.assertFalse(Resposta.objects.exists())
+
+    def test_recusa_pontuacao_adulterada_sem_salvar(self):
+        dados = self.dados_avaliacao()
+        dados[f"pergunta_{self.perguntas[0].pk}"] = 100
+        response = self.client.post(reverse("avaliacao"), dados)
+        self.assertContains(response, "Selecione uma das opções apresentadas.")
+        self.assertFalse(Diagnostico.objects.exists())
+
+    def test_resultado_pertence_a_sessao_que_respondeu(self):
+        self.client.post(reverse("avaliacao"), self.dados_avaliacao())
+        outro_cliente = Client()
+        response = outro_cliente.get(reverse("resultado_avaliacao"))
+        self.assertRedirects(response, reverse("avaliacao"))
+
+    def test_orienta_cadastro_quando_nao_existem_empresas(self):
+        Empresa.objects.all().delete()
+        response = self.client.get(reverse("avaliacao"))
+        self.assertContains(response, "Cadastre uma empresa")
+        self.assertNotContains(response, "Submeter Avaliação")
+
+    def test_questionario_vazio_nao_pode_ser_submetido(self):
+        Pergunta.objects.all().delete()
+        response = self.client.post(reverse("avaliacao"), {"empresa": self.empresa.pk})
+        self.assertContains(response, "não possui perguntas disponíveis")
+        self.assertFalse(Diagnostico.objects.exists())
+
+    def test_falha_ao_salvar_respostas_desfaz_criacao_do_diagnostico(self):
+        form = AvaliacaoForm(self.dados_avaliacao())
+        self.assertTrue(form.is_valid())
+        with patch("esg.forms.Resposta.objects.bulk_create", side_effect=RuntimeError):
+            with self.assertRaises(RuntimeError):
+                form.save()
+        self.assertFalse(Diagnostico.objects.exists())
+        self.assertFalse(Resposta.objects.exists())

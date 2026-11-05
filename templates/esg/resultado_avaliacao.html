@@ -1,0 +1,16 @@
+{% extends 'esg/base.html' %}
+
+{% block content %}
+<section class="about-container avaliacao">
+    <div class="card">
+        <h2>Resultado da Avaliação de Maturidade</h2>
+        <p>Avaliação de <strong>{{ diagnostico.empresa.nome }}</strong>, realizada em {{ diagnostico.criado_em|date:"d/m/Y H:i" }}.</p>
+        <div class="mission-box">
+            <h3>{{ diagnostico.get_nivel_display }}</h3>
+            <p>Pontuação: {{ diagnostico.pontuacao_total }} de {{ diagnostico.pontuacao_maxima }} pontos ({{ percentual|floatformat:1 }}%).</p>
+        </div>
+        <p class="avaliacao-instrucoes">A pontuação considera todas as perguntas com o mesmo peso. As faixas são: Iniciante (menos de um terço do total), Intermediário (de um terço a menos de dois terços) e Avançado (a partir de dois terços).</p>
+        <a href="{% url 'avaliacao' %}" class="btn-primary">Responder nova avaliação</a>
+    </div>
+</section>
+{% endblock %}

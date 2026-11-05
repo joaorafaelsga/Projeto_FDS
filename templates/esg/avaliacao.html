@@ -1,0 +1,58 @@
+{% extends 'esg/base.html' %}
+{% load static %}
+
+{% block content %}
+<section class="about-container avaliacao">
+    <div class="card">
+        <h2>Questionário de Avaliação de Maturidade</h2>
+        <p>Selecione a empresa e responda a todas as perguntas para conhecer sua maturidade ESG.</p>
+        <p class="avaliacao-instrucoes">Cada prática vale 0 pontos (Não implementada), 1 ponto (Em implementação) ou 2 pontos (Implementada).</p>
+
+        {% if not tem_empresas %}
+            <p class="avaliacao-aviso">Cadastre uma empresa antes de responder ao questionário.</p>
+            <a href="{% url 'cadastrar_empresa' %}" class="btn-primary">Cadastrar empresa</a>
+        {% elif not form.perguntas %}
+            <p class="avaliacao-aviso">O questionário ainda não possui perguntas disponíveis.</p>
+        {% else %}
+            {% if form.errors %}
+                <p class="avaliacao-aviso" role="alert">Não foi possível concluir a avaliação. Verifique os campos destacados.</p>
+            {% endif %}
+            {% for erro in form.non_field_errors %}
+                <p class="avaliacao-aviso" role="alert">{{ erro }}</p>
+            {% endfor %}
+
+            <form method="post" novalidate>
+                {% csrf_token %}
+                <div class="form-group{% if form.empresa.errors %} campo-com-erro{% endif %}">
+                    <label for="{{ form.empresa.id_for_label }}">{{ form.empresa.label }} *</label>
+                    {{ form.empresa }}
+                    {% if form.empresa.errors %}
+                        <p class="avaliacao-erro" id="{{ form.empresa.auto_id }}_error">{{ form.empresa.errors.0 }}</p>
+                    {% endif %}
+                </div>
+
+                {% for pilar in pilares %}
+                    <section class="avaliacao-pilar">
+                        <h3>{{ pilar.nome }}</h3>
+                        {% for campo in pilar.campos %}
+                            <fieldset class="avaliacao-pergunta{% if campo.errors %} campo-com-erro{% endif %}"{% if campo.errors %} aria-describedby="{{ campo.auto_id }}_error"{% endif %}>
+                                <legend>{{ campo.label }} *</legend>
+                                {% for opcao in campo %}
+                                    <label class="avaliacao-opcao" for="{{ opcao.id_for_label }}">
+                                        {{ opcao.tag }} {{ opcao.choice_label }}
+                                    </label>
+                                {% endfor %}
+                                {% if campo.errors %}
+                                    <p class="avaliacao-erro" id="{{ campo.auto_id }}_error">{{ campo.errors.0 }}</p>
+                                {% endif %}
+                            </fieldset>
+                        {% endfor %}
+                    </section>
+                {% endfor %}
+                <button type="submit" class="btn-primary">Submeter Avaliação</button>
+            </form>
+        {% endif %}
+    </div>
+</section>
+<script src="{% static 'avaliacao.js' %}" defer></script>
+{% endblock %}

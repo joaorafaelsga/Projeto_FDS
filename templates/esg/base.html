@@ -20,6 +20,7 @@
             
             <a href="{% url 'cadastrar_empresa' %}" class="{% if request.resolver_match.url_name == 'cadastrar_empresa' %}active{% endif %}">Cadastro de Empresa</a>
             
+            <a href="{% url 'avaliacao' %}" class="{% if request.resolver_match.url_name == 'avaliacao' or request.resolver_match.url_name == 'resultado_avaliacao' %}active{% endif %}">Avaliação ESG</a>
             <a href="{% url 'fale_conosco' %}" class="{% if request.resolver_match.url_name == 'fale_conosco' %}active{% endif %}">Fale Connosco</a>
         </nav>
     </header>

@@ -1,5 +1,6 @@
 from django import forms
-from .models import Comentario, Empresa, Pergunta, Resposta
+from django.db import transaction
+from .models import Comentario, Diagnostico, Empresa, Pergunta, Resposta
 
 class EmpresaForm(forms.ModelForm):
     class Meta:
@@ -66,3 +67,19 @@ class AvaliacaoForm(forms.Form):
                 "O questionário ainda não possui perguntas disponíveis."
             )
         return dados
+
+    @transaction.atomic
+    def save(self):
+        diagnostico = Diagnostico.objects.create(empresa=self.cleaned_data["empresa"])
+        respostas = []
+        for pergunta in self.perguntas:
+            pontuacao = self.cleaned_data[f"pergunta_{pergunta.pk}"]
+            respostas.append(Resposta(
+                diagnostico=diagnostico,
+                pergunta=pergunta,
+                pontuacao=pontuacao,
+                texto=Resposta.Pontuacao(pontuacao).label,
+            ))
+        Resposta.objects.bulk_create(respostas)
+        diagnostico.calcular_pontuacao()
+        return diagnostico

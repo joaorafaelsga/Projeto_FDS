@@ -1,7 +1,8 @@
 from django.contrib import messages
 from django.shortcuts import redirect, render
 
-from .forms import ComentarioForm, EmpresaForm
+from .forms import AvaliacaoForm, ComentarioForm, EmpresaForm
+from .models import Diagnostico, Empresa, Pergunta
 
 # Create your views here.
 def home(request):
@@ -46,3 +47,40 @@ def cadastrar_empresa(request):
         form = EmpresaForm()
     
     return render(request, 'esg/cadastrar_empresa.html', {'form': form})
+
+
+def avaliacao(request):
+    form = AvaliacaoForm(request.POST if request.method == "POST" else None)
+    if request.method == "POST" and form.is_valid():
+        diagnostico = form.save()
+        request.session["diagnostico_id"] = diagnostico.pk
+        return redirect("resultado_avaliacao")
+
+    pilares = []
+    for valor, nome in Pergunta.Pilar.choices:
+        campos = [
+            form[f"pergunta_{pergunta.pk}"]
+            for pergunta in form.perguntas if pergunta.pilar == valor
+        ]
+        if campos:
+            pilares.append({"nome": nome, "campos": campos})
+
+    return render(request, "esg/avaliacao.html", {
+        "form": form,
+        "pilares": pilares,
+        "tem_empresas": Empresa.objects.exists(),
+    })
+
+
+def resultado_avaliacao(request):
+    diagnostico = Diagnostico.objects.select_related("empresa").filter(
+        pk=request.session.get("diagnostico_id"),
+        pontuacao_maxima__gt=0,
+    ).first()
+    if diagnostico is None:
+        return redirect("avaliacao")
+
+    return render(request, "esg/resultado_avaliacao.html", {
+        "diagnostico": diagnostico,
+        "percentual": diagnostico.pontuacao_total / diagnostico.pontuacao_maxima * 100,
+    })

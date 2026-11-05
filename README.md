@@ -136,11 +136,18 @@ Acompanhamento e gestão de tarefas do projeto:
       <strong>Para</strong> obter a nota inicial de maturidade sustentável da minha organização.</p>
       <p><strong>Implementado:</strong> perguntas por pilar ESG, validação das respostas obrigatórias, cálculo da pontuação e exibição do nível de maturidade.</p>
     </td>
+    <td valign="top" bgcolor="#e3f2fd">
+      <strong>US06 — Emissão de Relatório e Recomendações</strong>
+      <p><strong>Como</strong> gestor da empresa,<br>
+      <strong>Quero</strong> visualizar um relatório com sugestões baseadas no diagnóstico,<br>
+      <strong>Para</strong> elaborar um plano de ação para melhorar as práticas ESG.</p>
+      <p><strong>Implementado:</strong> tabela comparativa dos pilares, recomendações em ordem de prioridade e impressão ou salvamento em PDF pelo navegador.</p>
+    </td>
   </tr>
 </table>
 
-As regras da US05 estão descritas no [documento de histórias e BDD](HISTORIAS.md#us05-questionário-de-avaliação-de-maturidade).
+As regras da US05 e o funcionamento da US06 estão descritos no [documento de histórias e BDD](HISTORIAS.md).
 
-Para experimentar a avaliação, execute `python manage.py migrate`, inicie o servidor e acesse **Avaliação ESG** no menu. Cadastre uma empresa caso ainda não exista nenhuma.
+Para experimentar a avaliação, execute `python manage.py migrate`, inicie o servidor e acesse **Avaliação ESG** no menu. Cadastre uma empresa caso ainda não exista nenhuma. Depois de submeter a avaliação, o resultado apresenta o comparativo e o plano de ação. Clique em **Imprimir / Salvar PDF** para imprimir o relatório ou escolher o destino PDF no navegador.
 
-Validação automatizada: `python manage.py test` executa os testes de pontuação, formulário, integração e os cenários Selenium, incluindo envio completo e destaque de perguntas pendentes. Os testes de navegador exigem Chrome e um driver compatível, conforme a configuração em `esg/tests_e2e.py`.
+Validação automatizada: `python manage.py test` executa os testes de pontuação, formulário, integração e os cenários Selenium, incluindo envio completo, destaque de perguntas pendentes, recomendações e exportação do relatório em PDF. Os testes de navegador exigem Chrome e um driver compatível, conforme a configuração em `esg/tests_e2e.py`.

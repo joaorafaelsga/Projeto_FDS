@@ -129,3 +129,14 @@ Este documento apresenta as Histórias de Usuário e os cenários BDD para a pla
   - **Dado que** o gestor está na tela de relatório final,
   - **Quando** clica na opção "Imprimir / Salvar PDF",
   - **Então** o sistema formata a página de maneira limpa (sem menus de navegação) para facilitar a impressão do plano de ação.
+
+
+### Funcionamento do relatório implementado (Entrega 04)
+- O relatório aparece na página de resultado da US05 (`/avaliacao/resultado/`), na sessão que enviou a avaliação.
+- A tabela apresenta os pontos obtidos, o máximo e o percentual em cada pilar ESG, usando apenas as respostas daquele diagnóstico.
+- O plano de ação exibe primeiro os pilares com menor percentual, considerando que cada pilar pode ter uma quantidade diferente de perguntas.
+- A prioridade é **Alta** abaixo de 1/3 da pontuação máxima do pilar, **Média** de 1/3 até menos de 2/3 e **Acompanhamento** a partir de 2/3.
+- As recomendações tratam de consumo e resíduos no Ambiental; saúde, segurança e inclusão no Social; e ética, compliance e transparência em Governança.
+- Pilares com pontuação alta recebem orientações para manter as práticas e acompanhar os indicadores. Pilares sem respostas pontuadas são exibidos como não avaliados.
+- O botão **Imprimir / Salvar PDF** abre a impressão do navegador. O usuário pode selecionar um destino PDF para salvar o documento.
+- A versão impressa mantém o comparativo e as recomendações, ocultando o menu, o rodapé e os botões de ação.

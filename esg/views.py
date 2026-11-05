@@ -1,7 +1,9 @@
 from django.contrib import messages
 from django.shortcuts import get_object_or_404, redirect, render
 
-from .forms import AvaliacaoForm, ComentarioForm, EmpresaForm, HistoricoAvaliacoesForm
+from .forms import (
+    AvaliacaoForm, ComentarioForm, EmpresaForm, HistoricoAvaliacoesForm,
+)
 from .models import Diagnostico, Empresa, Pergunta
 
 # Create your views here.
@@ -78,7 +80,9 @@ def resultado_avaliacao(request, empresa_id=None, diagnostico_id=None):
         pontuacao_maxima__gt=0,
     ).exclude(nivel="")
     if diagnostico_id is None:
-        diagnostico = diagnosticos.filter(pk=request.session.get("diagnostico_id")).first()
+        diagnostico = diagnosticos.filter(
+            pk=request.session.get("diagnostico_id")
+        ).first()
         if diagnostico is None:
             return redirect("avaliacao")
     else:
@@ -97,7 +101,6 @@ def resultado_avaliacao(request, empresa_id=None, diagnostico_id=None):
         "diagnostico": diagnostico,
         "percentual": diagnostico.pontuacao_total / diagnostico.pontuacao_maxima * 100,
     })
-
 
 
 def historico_avaliacoes(request):

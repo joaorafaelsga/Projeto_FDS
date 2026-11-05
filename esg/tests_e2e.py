@@ -6,6 +6,7 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import Select, WebDriverWait
 
+from .forms import AvaliacaoForm
 from .models import Comentario, Diagnostico, Empresa, Pergunta
 
 
@@ -205,3 +206,63 @@ class TestesE2E(StaticLiveServerTestCase):
             self.assertTrue(base64.b64decode(pdf["data"]).startswith(b"%PDF-"))
         finally:
             self.driver.execute_cdp_cmd("Emulation.setEmulatedMedia", {"media": ""})
+
+
+    # ---------- Histórico de avaliações ----------
+
+    def consultar_historico(self, empresa):
+        self.abrir("/historico/")
+        Select(self.driver.find_element(By.NAME, "empresa")).select_by_value(str(empresa.pk))
+        self.driver.find_element(By.CSS_SELECTOR, ".historico button[type=submit]").click()
+        WebDriverWait(self.driver, 5).until(
+            lambda driver: driver.find_element(By.CSS_SELECTOR, ".historico .relatorio-comparativo").is_displayed()
+        )
+
+    def test_historico_filtra_empresa_e_abre_avaliacao_antiga(self):
+        perguntas = self.preparar_avaliacao()
+        empresa = Empresa.objects.get(nome="Empresa Sustentável")
+        avaliacoes = []
+        for pontuacao in [0, 2]:
+            form = AvaliacaoForm({
+                "empresa": empresa.pk,
+                **{f"pergunta_{pergunta.pk}": pontuacao for pergunta in perguntas},
+            })
+            self.assertTrue(form.is_valid(), form.errors)
+            avaliacoes.append(form.save())
+        outra_empresa = Empresa.objects.create(nome="Outra empresa", setor="Varejo", porte="Média")
+        Diagnostico.objects.create(
+            empresa=outra_empresa, pontuacao_total=1, pontuacao_maxima=2, nivel="intermediario"
+        )
+        self.driver.set_window_size(1024, 900)
+        self.consultar_historico(empresa)
+        linhas = self.driver.find_elements(By.CSS_SELECTOR, ".historico tbody tr")
+        self.assertEqual(len(linhas), 2)
+        self.assertIn("6 de 6", linhas[0].text)
+        self.assertIn("0 de 6", linhas[1].text)
+        self.assertIn("Iniciante", linhas[1].text)
+        self.assertTrue(self.driver.execute_script(
+            "return document.documentElement.scrollWidth <= window.innerWidth;"
+        ), "O menu não deve causar rolagem horizontal na página.")
+
+        linhas[1].find_element(By.LINK_TEXT, "Ver relatório").click()
+        WebDriverWait(self.driver, 5).until(
+            lambda driver: "0 de 6 pontos" in driver.find_element(By.CSS_SELECTOR, ".mission-box").text
+        )
+        self.assertIn(f"/avaliacao/{avaliacoes[0].pk}/", self.driver.current_url)
+        self.assertIn("Plano de ação recomendado", self.driver.page_source)
+        self.assertEqual(Diagnostico.objects.count(), 3)
+        self.driver.find_element(By.LINK_TEXT, "Ver histórico da empresa").click()
+        WebDriverWait(self.driver, 5).until(
+            lambda driver: driver.find_element(By.CSS_SELECTOR, ".historico table").is_displayed()
+        )
+        selecao = Select(self.driver.find_element(By.NAME, "empresa"))
+        self.assertEqual(selecao.first_selected_option.get_attribute("value"), str(empresa.pk))
+
+    def test_historico_informa_empresa_sem_avaliacoes(self):
+        empresa = Empresa.objects.create(nome="Empresa Nova", setor="Serviços", porte="Pequena")
+        self.consultar_historico(empresa)
+        self.assertIn(
+            "Esta empresa ainda não possui avaliações concluídas.",
+            self.driver.find_element(By.CSS_SELECTOR, ".historico .relatorio-comparativo").text,
+        )
+        self.assertEqual(self.driver.find_elements(By.CSS_SELECTOR, ".historico table"), [])

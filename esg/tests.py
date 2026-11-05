@@ -1,7 +1,9 @@
+from datetime import timedelta
 from unittest.mock import patch
 
 from django.test import Client, TestCase, override_settings
 from django.urls import reverse
+from django.utils import timezone
 
 from .forms import AvaliacaoForm
 from .models import Diagnostico, Empresa, Pergunta, Resposta
@@ -324,3 +326,79 @@ class RelatorioHistoricoTests(AvaliacaoTestCase):
                     "empresa_id": self.empresa.pk, "diagnostico_id": identificador,
                 }))
                 self.assertEqual(response.status_code, 404)
+
+
+@override_settings(STORAGES={
+    "default": {"BACKEND": "django.core.files.storage.FileSystemStorage"},
+    "staticfiles": {"BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage"},
+})
+class HistoricoAvaliacoesTests(AvaliacaoTestCase):
+    def avaliar(self, pontuacao=1, empresa=None):
+        dados = self.dados_avaliacao(pontuacao)
+        dados["empresa"] = (empresa or self.empresa).pk
+        form = AvaliacaoForm(dados)
+        self.assertTrue(form.is_valid(), form.errors)
+        return form.save()
+
+    def consultar(self, empresa=None):
+        return self.client.get(reverse("historico_avaliacoes"), {
+            "empresa": (empresa or self.empresa).pk,
+        })
+
+    def test_exibe_selecao_sem_listar_avaliacoes_antes_da_consulta(self):
+        self.avaliar()
+        response = self.client.get(reverse("historico_avaliacoes"))
+        self.assertContains(response, "Selecione uma empresa")
+        self.assertNotContains(response, "Ver relatório")
+        self.assertIsNone(response.context["empresa_selecionada"])
+
+    def test_lista_notas_e_niveis_da_mais_recente_para_a_mais_antiga(self):
+        recente = self.avaliar(2)
+        antiga = self.avaliar(0)
+        agora = timezone.now()
+        Diagnostico.objects.filter(pk=recente.pk).update(criado_em=agora - timedelta(days=1))
+        Diagnostico.objects.filter(pk=antiga.pk).update(criado_em=agora - timedelta(days=2))
+        response = self.consultar()
+        self.assertEqual(list(response.context["diagnosticos"]), [recente, antiga])
+        for texto in ["6 de 6", "0 de 6", "Avançado", "Iniciante"]:
+            self.assertContains(response, texto)
+        self.assertContains(response, reverse("relatorio_historico", args=[self.empresa.pk, antiga.pk]))
+
+    def test_filtra_avaliacoes_da_empresa_selecionada(self):
+        propria = self.avaliar()
+        outra_empresa = Empresa.objects.create(nome="Outra empresa", setor="Varejo", porte="Média")
+        outra_avaliacao = self.avaliar(2, outra_empresa)
+        response = self.consultar()
+        self.assertEqual(list(response.context["diagnosticos"]), [propria])
+        self.assertNotContains(response, reverse("relatorio_historico", args=[outra_empresa.pk, outra_avaliacao.pk]))
+
+    def test_mesma_data_usa_ordem_de_cadastro_como_desempate(self):
+        antiga = self.avaliar()
+        recente = self.avaliar()
+        Diagnostico.objects.all().update(criado_em=timezone.now())
+        self.assertEqual(list(self.consultar().context["diagnosticos"]), [recente, antiga])
+
+    def test_informa_quando_empresa_nao_possui_avaliacoes(self):
+        response = self.consultar()
+        self.assertContains(response, "Esta empresa ainda não possui avaliações concluídas.")
+        self.assertNotContains(response, "Ver relatório")
+
+    def test_avaliacoes_antigas_sem_nota_nao_aparecem_no_historico(self):
+        Diagnostico.objects.create(empresa=self.empresa)
+        concluida = self.avaliar()
+        self.assertEqual(list(self.consultar().context["diagnosticos"]), [concluida])
+
+    def test_empresa_invalida_nao_lista_diagnosticos(self):
+        self.avaliar()
+        for identificador in ["invalido", 99999, ""]:
+            with self.subTest(empresa=identificador):
+                response = self.client.get(reverse("historico_avaliacoes"), {"empresa": identificador})
+                self.assertEqual(response.status_code, 200)
+                self.assertTrue(response.context["form"].errors)
+                self.assertNotContains(response, "Ver relatório")
+
+    def test_sem_empresas_orienta_cadastro(self):
+        Empresa.objects.all().delete()
+        response = self.client.get(reverse("historico_avaliacoes"))
+        self.assertContains(response, "Cadastre uma empresa")
+        self.assertNotContains(response, "Consultar histórico</button>")

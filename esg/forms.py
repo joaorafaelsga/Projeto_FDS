@@ -83,3 +83,16 @@ class AvaliacaoForm(forms.Form):
         Resposta.objects.bulk_create(respostas)
         diagnostico.calcular_pontuacao()
         return diagnostico
+
+
+class HistoricoAvaliacoesForm(forms.Form):
+    empresa = forms.ModelChoiceField(
+        queryset=Empresa.objects.order_by("nome"),
+        label="Empresa",
+        empty_label="Selecione a empresa",
+        widget=forms.Select(attrs={"class": "form-control"}),
+        error_messages={
+            "required": "Selecione uma empresa para consultar o histórico.",
+            "invalid_choice": "Selecione uma empresa cadastrada.",
+        },
+    )

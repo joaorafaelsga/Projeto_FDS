@@ -1,7 +1,7 @@
 from django.contrib import messages
 from django.shortcuts import get_object_or_404, redirect, render
 
-from .forms import AvaliacaoForm, ComentarioForm, EmpresaForm
+from .forms import AvaliacaoForm, ComentarioForm, EmpresaForm, HistoricoAvaliacoesForm
 from .models import Diagnostico, Empresa, Pergunta
 
 # Create your views here.
@@ -96,4 +96,24 @@ def resultado_avaliacao(request, empresa_id=None, diagnostico_id=None):
         "plano_acao": plano_acao,
         "diagnostico": diagnostico,
         "percentual": diagnostico.pontuacao_total / diagnostico.pontuacao_maxima * 100,
+    })
+
+
+
+def historico_avaliacoes(request):
+    form = HistoricoAvaliacoesForm(request.GET or None)
+    empresa_selecionada = None
+    diagnosticos = Diagnostico.objects.none()
+    if form.is_valid():
+        empresa_selecionada = form.cleaned_data["empresa"]
+        diagnosticos = empresa_selecionada.diagnosticos.filter(
+            pontuacao_total__isnull=False,
+            pontuacao_maxima__gt=0,
+        ).exclude(nivel="").order_by("-criado_em", "-pk")
+
+    return render(request, "esg/historico_avaliacoes.html", {
+        "form": form,
+        "empresa_selecionada": empresa_selecionada,
+        "diagnosticos": diagnosticos,
+        "tem_empresas": Empresa.objects.exists(),
     })

@@ -58,6 +58,7 @@
         <div class="relatorio-acoes">
             <button type="button" class="btn-primary" id="imprimir-relatorio">Imprimir / Salvar PDF</button>
             <a href="{% url 'avaliacao' %}" class="btn-primary">Responder nova avaliação</a>
+            <a href="{% url 'historico_avaliacoes' %}?empresa={{ diagnostico.empresa_id }}" class="btn-primary">Ver histórico da empresa</a>
             <p>Para salvar um PDF, escolha essa opção na janela de impressão do navegador.</p>
         </div>
     </div>

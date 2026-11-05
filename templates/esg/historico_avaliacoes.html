@@ -1,0 +1,57 @@
+{% extends 'esg/base.html' %}
+
+{% block content %}
+<section class="about-container historico">
+    <div class="card">
+        <h2>Histórico de Avaliações ESG</h2>
+        <p class="avaliacao-instrucoes">Selecione uma empresa para consultar suas avaliações e acompanhar a evolução da maturidade ESG.</p>
+
+        {% if not tem_empresas %}
+            <p class="avaliacao-aviso">Cadastre uma empresa para consultar o histórico de avaliações.</p>
+            <a href="{% url 'cadastrar_empresa' %}" class="btn-primary">Cadastrar empresa</a>
+        {% else %}
+            <form method="get">
+                <div class="form-group">
+                    <label for="{{ form.empresa.id_for_label }}">{{ form.empresa.label }} *</label>
+                    {{ form.empresa }}
+                    {% if form.empresa.errors %}
+                        <p class="avaliacao-erro" id="{{ form.empresa.auto_id }}_error" role="alert">{{ form.empresa.errors.0 }}</p>
+                    {% endif %}
+                </div>
+                <button type="submit" class="btn-primary">Consultar histórico</button>
+            </form>
+
+            {% if empresa_selecionada %}
+                <div class="relatorio-comparativo">
+                    {% if diagnosticos %}
+                        <table class="relatorio-tabela">
+                            <caption>Avaliações de {{ empresa_selecionada.nome }}</caption>
+                            <thead>
+                                <tr>
+                                    <th scope="col">Data</th>
+                                    <th scope="col">Pontuação</th>
+                                    <th scope="col">Maturidade</th>
+                                    <th scope="col">Relatório</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for diagnostico in diagnosticos %}
+                                    <tr>
+                                        <td>{{ diagnostico.criado_em|date:"d/m/Y H:i" }}</td>
+                                        <td>{{ diagnostico.pontuacao_total }} de {{ diagnostico.pontuacao_maxima }}</td>
+                                        <td>{{ diagnostico.get_nivel_display }}</td>
+                                        <td><a href="{% url 'relatorio_historico' empresa_selecionada.pk diagnostico.pk %}">Ver relatório</a></td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    {% else %}
+                        <p>Esta empresa ainda não possui avaliações concluídas.</p>
+                        <a href="{% url 'avaliacao' %}" class="btn-primary">Responder avaliação</a>
+                    {% endif %}
+                </div>
+            {% endif %}
+        {% endif %}
+    </div>
+</section>
+{% endblock %}

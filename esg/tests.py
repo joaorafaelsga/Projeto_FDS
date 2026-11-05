@@ -170,3 +170,64 @@ class AvaliacaoViewTests(AvaliacaoTestCase):
                 form.save()
         self.assertFalse(Diagnostico.objects.exists())
         self.assertFalse(Resposta.objects.exists())
+
+
+class RelatorioDiagnosticoTests(AvaliacaoTestCase):
+    def criar_diagnostico(self, pontuacoes):
+        diagnostico = Diagnostico.objects.create(empresa=self.empresa)
+        for pergunta, pontuacao in zip(self.perguntas, pontuacoes):
+            Resposta.objects.create(
+                diagnostico=diagnostico, pergunta=pergunta,
+                pontuacao=pontuacao, texto="Resposta da avaliação",
+            )
+        return diagnostico
+
+    def test_compara_pontuacoes_dos_tres_pilares(self):
+        diagnostico = self.criar_diagnostico([2, 1, 0])
+        pilares = diagnostico.gerar_relatorio()
+        self.assertEqual([pilar["nome"] for pilar in pilares], ["Ambiental", "Social", "Governança"])
+        self.assertEqual([pilar["pontuacao"] for pilar in pilares], [2, 1, 0])
+        self.assertEqual([pilar["maxima"] for pilar in pilares], [2, 2, 2])
+        self.assertEqual([pilar["percentual"] for pilar in pilares], [100, 50, 0])
+        self.assertEqual(
+            [pilar["prioridade"] for pilar in pilares], ["Acompanhamento", "Média", "Alta"]
+        )
+
+    def test_governanca_com_nota_baixa_recebe_acoes_especificas(self):
+        diagnostico = self.criar_diagnostico([2, 2, 0])
+        governanca = diagnostico.gerar_relatorio()[2]
+        orientacoes = " ".join(governanca["recomendacoes"])
+        for termo in ["ética", "compliance", "transparentes"]:
+            self.assertIn(termo, orientacoes)
+
+    def test_nota_alta_recebe_orientacao_de_acompanhamento(self):
+        diagnostico = self.criar_diagnostico([2, 2, 2])
+        for pilar in diagnostico.gerar_relatorio():
+            self.assertEqual(pilar["prioridade"], "Acompanhamento")
+            self.assertIn("Manter as práticas", pilar["recomendacoes"][0])
+
+    def test_nao_confunde_pilar_sem_nota_com_pontuacao_zero(self):
+        diagnostico = self.criar_diagnostico([0, None, None])
+        ambiental, social, governanca = diagnostico.gerar_relatorio()
+        self.assertEqual(ambiental["percentual"], 0)
+        self.assertEqual(ambiental["prioridade"], "Alta")
+        for pilar in [social, governanca]:
+            self.assertIsNone(pilar["percentual"])
+            self.assertEqual(pilar["prioridade"], "Sem avaliação")
+
+    def test_pontuacao_maxima_depende_das_respostas_da_avaliacao(self):
+        diagnostico = self.criar_diagnostico([2, 1, 0])
+        pergunta = Pergunta.objects.create(texto="Outra prática ambiental", pilar="ambiental")
+        Resposta.objects.create(
+            diagnostico=diagnostico, pergunta=pergunta, pontuacao=0, texto="Não implementada"
+        )
+        Pergunta.objects.create(texto="Pergunta cadastrada depois", pilar="ambiental")
+        ambiental = diagnostico.gerar_relatorio()[0]
+        self.assertEqual(ambiental["pontuacao"], 2)
+        self.assertEqual(ambiental["maxima"], 4)
+        self.assertEqual(ambiental["percentual"], 50)
+
+    def test_relatorio_usa_somente_respostas_do_diagnostico(self):
+        primeiro = self.criar_diagnostico([0, 0, 0])
+        self.criar_diagnostico([2, 2, 2])
+        self.assertEqual([pilar["pontuacao"] for pilar in primeiro.gerar_relatorio()], [0, 0, 0])

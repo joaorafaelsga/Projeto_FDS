@@ -62,6 +62,59 @@ class Diagnostico(models.Model):
         self.save(update_fields=["pontuacao_total", "pontuacao_maxima", "nivel"])
 
 
+    def gerar_relatorio(self):
+        recomendacoes = {
+            Pergunta.Pilar.AMBIENTAL: [
+                "Medir o consumo de água e energia e definir metas de redução.",
+                "Organizar a separação e a destinação correta dos resíduos.",
+            ],
+            Pergunta.Pilar.SOCIAL: [
+                "Revisar as condições de saúde e segurança e orientar a equipe.",
+                "Definir ações de diversidade, inclusão e bem-estar dos colaboradores.",
+            ],
+            Pergunta.Pilar.GOVERNANCA: [
+                "Definir um código de ética e conduta e divulgá-lo à equipe.",
+                "Revisar o cumprimento das obrigações legais e as práticas de compliance.",
+                "Manter registros transparentes das decisões e das finanças da empresa.",
+            ],
+        }
+        notas_por_pilar = {valor: [] for valor in Pergunta.Pilar.values}
+        for resposta in self.respostas.select_related("pergunta"):
+            if resposta.pontuacao is not None:
+                notas_por_pilar[resposta.pergunta.pilar].append(resposta.pontuacao)
+
+        pilares = []
+        for valor, nome in Pergunta.Pilar.choices:
+            notas = notas_por_pilar[valor]
+            total = sum(notas)
+            maxima = len(notas) * max(Resposta.Pontuacao.values)
+            orientacoes = recomendacoes[valor]
+
+            if not notas:
+                prioridade = "Sem avaliação"
+                orientacoes = ["Responder às perguntas deste pilar para receber recomendações."]
+            elif total * 3 < maxima:
+                prioridade = "Alta"
+            elif total * 3 < maxima * 2:
+                prioridade = "Média"
+            else:
+                prioridade = "Acompanhamento"
+                orientacoes = [
+                    f"Manter as práticas de {nome.lower()}, acompanhar seus indicadores "
+                    "e revisar os resultados periodicamente."
+                ]
+
+            pilares.append({
+                "nome": nome,
+                "pontuacao": total,
+                "maxima": maxima,
+                "percentual": total / maxima * 100 if maxima else None,
+                "prioridade": prioridade,
+                "recomendacoes": orientacoes,
+            })
+        return pilares
+
+
 class Resposta(models.Model):
     class Pontuacao(models.IntegerChoices):
         NAO_IMPLEMENTADA = 0, "Não implementada"

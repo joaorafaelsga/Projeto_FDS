@@ -1,6 +1,6 @@
 # Histórias de Usuário e Cenários de Validação (BDD)
 
-Este documento apresenta as Histórias de Usuário e os cenários BDD para a plataforma ESGFy, conforme os requisitos da Entrega 03.
+Este documento apresenta as Histórias de Usuário e os cenários BDD para a plataforma ESGFy, conforme os requisitos das Entregas 03 e 04.
 
 ---
 
@@ -90,6 +90,22 @@ Este documento apresenta as Histórias de Usuário e os cenários BDD para a pla
   - **Dado que** o gestor não respondeu a todas as perguntas obrigatórias,
   - **Quando** tenta clicar em "Submeter Avaliação",
   - **Então** o sistema impede o envio, rola a página para a pergunta pendente e destaca-a com uma mensagem de aviso.
+
+---
+
+
+### Regras de pontuação implementadas (Entrega 04)
+- A avaliação é acessada pelo menu **Avaliação ESG** (`/avaliacao/`) e vinculada a uma empresa cadastrada.
+- As perguntas são organizadas nos pilares Ambiental, Social e Governança, com o mesmo peso.
+- Cada resposta vale **0** (Não implementada), **1** (Em implementação) ou **2** (Implementada).
+- A nota corresponde à soma das respostas; a pontuação máxima é o número de perguntas multiplicado por 2.
+- O nível é **Iniciante** abaixo de 1/3 da pontuação máxima, **Intermediário** de 1/3 até menos de 2/3 e **Avançado** a partir de 2/3.
+- Com as seis perguntas iniciais: 0 a 3 pontos = Iniciante; 4 a 7 = Intermediário; 8 a 12 = Avançado.
+- Respostas, total, máximo e nível são gravados juntos. Avaliações incompletas ou com opções inválidas não são salvas.
+- O formulário mantém as escolhas válidas, destaca os campos com erro e leva o foco ao primeiro campo pendente.
+- O resultado da última avaliação fica disponível na sessão que a enviou. Atualizar a página de resultado não cria outra avaliação.
+- Respostas antigas em texto são preservadas sem receber uma pontuação arbitrária.
+- As migrações incluem seis perguntas iniciais; outras perguntas podem ser gerenciadas pelo Django Admin.
 
 ---
 

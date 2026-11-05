@@ -123,3 +123,24 @@ Acompanhamento e gestão de tarefas do projeto:
 * **[Documento Guia de Contribuição e Versionamento](CONTRIBUTING.md)** 
 * **Testes E2E (Selenium):** testes automatizados que simulam o usuário no navegador, cobrindo as páginas do site, o Fale Conosco e o Cadastro de Empresa. Para rodar: `python manage.py test esg`<img width="1480" height="644" alt="image" src="https://github.com/user-attachments/assets/daf43aa2-d9c8-4c96-a516-1e15a6ec5977" />
 
+
+
+### Histórias implementadas
+
+<table>
+  <tr>
+    <td valign="top" bgcolor="#fff9c4">
+      <strong>US05 — Questionário de Avaliação de Maturidade</strong>
+      <p><strong>Como</strong> gestor da empresa,<br>
+      <strong>Quero</strong> responder a um questionário com opções objetivas pontuadas,<br>
+      <strong>Para</strong> obter a nota inicial de maturidade sustentável da minha organização.</p>
+      <p><strong>Implementado:</strong> perguntas por pilar ESG, validação das respostas obrigatórias, cálculo da pontuação e exibição do nível de maturidade.</p>
+    </td>
+  </tr>
+</table>
+
+As regras da US05 estão descritas no [documento de histórias e BDD](HISTORIAS.md#us05-questionário-de-avaliação-de-maturidade).
+
+Para experimentar a avaliação, execute `python manage.py migrate`, inicie o servidor e acesse **Avaliação ESG** no menu. Cadastre uma empresa caso ainda não exista nenhuma.
+
+Validação automatizada: `python manage.py test` executa os testes de pontuação, formulário, integração e os cenários Selenium, incluindo envio completo e destaque de perguntas pendentes. Os testes de navegador exigem Chrome e um driver compatível, conforme a configuração em `esg/tests_e2e.py`.

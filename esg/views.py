@@ -80,7 +80,14 @@ def resultado_avaliacao(request):
     if diagnostico is None:
         return redirect("avaliacao")
 
+    pilares = diagnostico.gerar_relatorio()
+    plano_acao = sorted(
+        pilares,
+        key=lambda pilar: pilar["percentual"] if pilar["percentual"] is not None else 101,
+    )
     return render(request, "esg/resultado_avaliacao.html", {
+        "pilares": pilares,
+        "plano_acao": plano_acao,
         "diagnostico": diagnostico,
         "percentual": diagnostico.pontuacao_total / diagnostico.pontuacao_maxima * 100,
     })

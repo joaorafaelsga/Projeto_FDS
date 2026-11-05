@@ -1,7 +1,10 @@
 {% extends 'esg/base.html' %}
+{% load static %}
+
+{% block body_class %}pagina-relatorio{% endblock %}
 
 {% block content %}
-<section class="about-container avaliacao">
+<section class="about-container avaliacao relatorio">
     <div class="card">
         <h2>Resultado da Avaliação de Maturidade</h2>
         <p>Avaliação de <strong>{{ diagnostico.empresa.nome }}</strong>, realizada em {{ diagnostico.criado_em|date:"d/m/Y H:i" }}.</p>
@@ -10,7 +13,54 @@
             <p>Pontuação: {{ diagnostico.pontuacao_total }} de {{ diagnostico.pontuacao_maxima }} pontos ({{ percentual|floatformat:1 }}%).</p>
         </div>
         <p class="avaliacao-instrucoes">A pontuação considera todas as perguntas com o mesmo peso. As faixas são: Iniciante (menos de um terço do total), Intermediário (de um terço a menos de dois terços) e Avançado (a partir de dois terços).</p>
-        <a href="{% url 'avaliacao' %}" class="btn-primary">Responder nova avaliação</a>
+        <div class="relatorio-comparativo">
+            <table class="relatorio-tabela">
+                <caption>Comparativo dos pilares ESG</caption>
+                <thead>
+                    <tr>
+                        <th scope="col">Pilar</th>
+                        <th scope="col">Pontuação</th>
+                        <th scope="col">Percentual</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for pilar in pilares %}
+                        <tr>
+                            <th scope="row">{{ pilar.nome }}</th>
+                            {% if pilar.maxima %}
+                                <td>{{ pilar.pontuacao }} de {{ pilar.maxima }}</td>
+                                <td>{{ pilar.percentual|floatformat:1 }}%</td>
+                            {% else %}
+                                <td colspan="2">Não avaliado</td>
+                            {% endif %}
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <section class="relatorio-plano">
+            <h3>Plano de ação recomendado</h3>
+            <p>Comece pelos pilares com menor percentual de pontuação.</p>
+            {% for pilar in plano_acao %}
+                <div class="relatorio-recomendacao">
+                    <h4>{{ pilar.nome }}</h4>
+                    <p><strong>Prioridade:</strong> {{ pilar.prioridade }}</p>
+                    <ul>
+                        {% for recomendacao in pilar.recomendacoes %}
+                            <li>{{ recomendacao }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            {% endfor %}
+        </section>
+
+        <div class="relatorio-acoes">
+            <button type="button" class="btn-primary" id="imprimir-relatorio">Imprimir / Salvar PDF</button>
+            <a href="{% url 'avaliacao' %}" class="btn-primary">Responder nova avaliação</a>
+            <p>Para salvar um PDF, escolha essa opção na janela de impressão do navegador.</p>
+        </div>
     </div>
 </section>
+<script src="{% static 'relatorio.js' %}" defer></script>
 {% endblock %}

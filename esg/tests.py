@@ -231,3 +231,38 @@ class RelatorioDiagnosticoTests(AvaliacaoTestCase):
         primeiro = self.criar_diagnostico([0, 0, 0])
         self.criar_diagnostico([2, 2, 2])
         self.assertEqual([pilar["pontuacao"] for pilar in primeiro.gerar_relatorio()], [0, 0, 0])
+
+
+@override_settings(STORAGES={
+    "default": {"BACKEND": "django.core.files.storage.FileSystemStorage"},
+    "staticfiles": {"BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage"},
+})
+class RelatorioViewTests(AvaliacaoTestCase):
+    def enviar_avaliacao(self):
+        dados = self.dados_avaliacao(2)
+        dados[f"pergunta_{self.perguntas[2].pk}"] = 0
+        self.client.post(reverse("avaliacao"), dados)
+
+    def test_resultado_exibe_comparativo_e_governanca_como_prioridade(self):
+        self.enviar_avaliacao()
+        response = self.client.get(reverse("resultado_avaliacao"))
+        self.assertContains(response, "Comparativo dos pilares ESG")
+        self.assertContains(response, "Plano de ação recomendado")
+        self.assertContains(response, "compliance")
+        self.assertEqual(response.context["plano_acao"][0]["nome"], "Governança")
+        self.assertEqual(response.context["plano_acao"][0]["prioridade"], "Alta")
+        self.assertEqual(len(response.context["pilares"]), 3)
+
+    def test_relatorio_oferece_impressao_e_preserva_nota_salva(self):
+        self.enviar_avaliacao()
+        response = self.client.get(reverse("resultado_avaliacao"))
+        self.assertContains(response, "Imprimir / Salvar PDF")
+        self.assertContains(response, "relatorio.js")
+        self.assertContains(response, 'class="pagina-relatorio"')
+        self.assertContains(response, "4 de 6 pontos")
+        self.assertEqual(Diagnostico.objects.count(), 1)
+
+    def test_resultado_sem_avaliacao_redireciona_para_questionario(self):
+        self.assertRedirects(
+            self.client.get(reverse("resultado_avaliacao")), reverse("avaliacao")
+        )

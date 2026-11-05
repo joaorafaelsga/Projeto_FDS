@@ -353,3 +353,101 @@ label { display: block; margin-bottom: 8px; font-weight: 500; font-size: 14px; }
     border-radius: var(--border-radius);
     padding: 16px;
 }
+
+
+/* Relatório e recomendações */
+.relatorio-comparativo {
+    overflow-x: auto;
+    margin: 28px 0;
+}
+
+.relatorio-tabela {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+}
+
+.relatorio-tabela caption {
+    margin-bottom: 12px;
+    color: var(--esg-green);
+    text-align: left;
+    font-size: 20px;
+    font-weight: 600;
+}
+
+.relatorio-tabela th,
+.relatorio-tabela td {
+    padding: 12px;
+    border-bottom: 1px solid #CFD8DC;
+}
+
+.relatorio-tabela thead {
+    background-color: var(--bg-light);
+}
+
+.relatorio-recomendacao {
+    padding: 20px;
+    margin: 16px 0;
+    border: 1px solid #CFD8DC;
+    border-radius: var(--border-radius);
+}
+
+.relatorio-recomendacao ul {
+    padding-left: 20px;
+    margin-top: 12px;
+}
+
+.relatorio-recomendacao li + li {
+    margin-top: 8px;
+}
+
+.relatorio-acoes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 28px;
+}
+
+.relatorio-acoes p {
+    width: 100%;
+    color: var(--text-muted);
+    font-size: 14px;
+}
+
+@media print {
+    .pagina-relatorio {
+        display: block;
+        min-height: 0;
+        background: white;
+        color: black;
+    }
+
+    .pagina-relatorio .navbar,
+    .pagina-relatorio .site-footer,
+    .pagina-relatorio .relatorio-acoes {
+        display: none;
+    }
+
+    .pagina-relatorio .main-content,
+    .pagina-relatorio .relatorio {
+        width: 100%;
+        max-width: none;
+        margin: 0;
+        padding: 0;
+    }
+
+    .relatorio .card {
+        padding: 0;
+        box-shadow: none;
+        animation: none;
+    }
+
+    .relatorio-comparativo {
+        overflow: visible;
+    }
+
+    .relatorio-recomendacao,
+    .relatorio-tabela tr {
+        break-inside: avoid;
+    }
+}

@@ -132,7 +132,7 @@ Este documento apresenta as Histórias de Usuário e os cenários BDD para a pla
 
 
 ### Funcionamento do relatório implementado (Entrega 04)
-- O relatório aparece na página de resultado da US05 (`/avaliacao/resultado/`), na sessão que enviou a avaliação.
+- O relatório aparece na página de resultado da US05 (`/avaliacao/resultado/`) e também pode ser consultado pelo histórico da US07.
 - A tabela apresenta os pontos obtidos, o máximo e o percentual em cada pilar ESG, usando apenas as respostas daquele diagnóstico.
 - O plano de ação exibe primeiro os pilares com menor percentual, considerando que cada pilar pode ter uma quantidade diferente de perguntas.
 - A prioridade é **Alta** abaixo de 1/3 da pontuação máxima do pilar, **Média** de 1/3 até menos de 2/3 e **Acompanhamento** a partir de 2/3.
@@ -140,3 +140,41 @@ Este documento apresenta as Histórias de Usuário e os cenários BDD para a pla
 - Pilares com pontuação alta recebem orientações para manter as práticas e acompanhar os indicadores. Pilares sem respostas pontuadas são exibidos como não avaliados.
 - O botão **Imprimir / Salvar PDF** abre a impressão do navegador. O usuário pode selecionar um destino PDF para salvar o documento.
 - A versão impressa mantém o comparativo e as recomendações, ocultando o menu, o rodapé e os botões de ação.
+
+
+---
+
+## [US07] Histórico de Avaliações ESG
+**Referência no Jira:** SCRUM-22.
+
+**Como** gestor da empresa,
+**Quero** consultar o histórico das avaliações ESG realizadas,
+**Para** acompanhar a evolução da maturidade sustentável da organização.
+
+### Cenários de Aceitação (BDD):
+- **Cenário 1: Seleção da empresa**
+  - **Dado que** o gestor acessou a página Histórico ESG,
+  - **Quando** seleciona uma empresa cadastrada e clica em "Consultar histórico",
+  - **Então** o sistema exibe somente as avaliações daquela empresa.
+
+- **Cenário 2: Informações e ordenação das avaliações**
+  - **Dado que** a empresa possui avaliações concluídas,
+  - **Quando** o histórico é consultado,
+  - **Então** o sistema mostra data, pontuação obtida, pontuação máxima e nível de maturidade, da avaliação mais recente para a mais antiga.
+
+- **Cenário 3: Consulta de um relatório anterior**
+  - **Dado que** o gestor visualiza o histórico da empresa,
+  - **Quando** clica em "Ver relatório" em uma avaliação,
+  - **Então** o sistema abre o relatório da US06 com os dados daquela avaliação, incluindo recomendações e impressão.
+
+- **Cenário 4: Empresa sem avaliações**
+  - **Dado que** a empresa ainda não possui avaliações concluídas,
+  - **Quando** seu histórico é consultado,
+  - **Então** o sistema informa que não há avaliações e apresenta um acesso ao questionário.
+
+### Funcionamento implementado (Entrega 04)
+- A página é acessada pelo menu **Histórico ESG** (`/historico/`). A empresa selecionada fica no endereço da consulta.
+- A listagem usa as datas registradas, com desempate pelo cadastro mais recente quando as datas são iguais.
+- Apenas diagnósticos concluídos, com pontuação e nível, aparecem na listagem; registros antigos sem nota permanecem preservados no banco.
+- Abrir uma avaliação anterior reutiliza o relatório da US06, sem recalcular a nota, criar outra avaliação ou alterar a última avaliação da sessão.
+- O relatório permite voltar ao histórico da mesma empresa pelo botão **Ver histórico da empresa**.

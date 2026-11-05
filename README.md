@@ -143,11 +143,18 @@ Acompanhamento e gestão de tarefas do projeto:
       <strong>Para</strong> elaborar um plano de ação para melhorar as práticas ESG.</p>
       <p><strong>Implementado:</strong> tabela comparativa dos pilares, recomendações em ordem de prioridade e impressão ou salvamento em PDF pelo navegador.</p>
     </td>
+    <td valign="top" bgcolor="#fce4ec">
+      <strong>US07 — Histórico de Avaliações ESG</strong>
+      <p><strong>Como</strong> gestor da empresa,<br>
+      <strong>Quero</strong> consultar o histórico das avaliações ESG realizadas,<br>
+      <strong>Para</strong> acompanhar a evolução da maturidade sustentável da organização.</p>
+      <p><strong>Implementado:</strong> seleção de empresa, avaliações da mais recente para a mais antiga, consulta de relatórios anteriores e mensagem para histórico vazio.</p>
+    </td>
   </tr>
 </table>
 
-As regras da US05 e o funcionamento da US06 estão descritos no [documento de histórias e BDD](HISTORIAS.md).
+As regras e os cenários das histórias US05, US06 e US07 estão descritos no [documento de histórias e BDD](HISTORIAS.md).
 
-Para experimentar a avaliação, execute `python manage.py migrate`, inicie o servidor e acesse **Avaliação ESG** no menu. Cadastre uma empresa caso ainda não exista nenhuma. Depois de submeter a avaliação, o resultado apresenta o comparativo e o plano de ação. Clique em **Imprimir / Salvar PDF** para imprimir o relatório ou escolher o destino PDF no navegador.
+Para experimentar a avaliação, execute `python manage.py migrate`, inicie o servidor e acesse **Avaliação ESG** no menu. Cadastre uma empresa caso ainda não exista nenhuma. Depois de submeter a avaliação, o resultado apresenta o comparativo e o plano de ação. Clique em **Imprimir / Salvar PDF** para imprimir o relatório ou escolher o destino PDF no navegador. Para consultar avaliações anteriores, acesse **Histórico ESG**, selecione a empresa e clique em **Consultar histórico**. Use **Ver relatório** para abrir uma avaliação salva.
 
-Validação automatizada: `python manage.py test` executa os testes de pontuação, formulário, integração e os cenários Selenium, incluindo envio completo, destaque de perguntas pendentes, recomendações e exportação do relatório em PDF. Os testes de navegador exigem Chrome e um driver compatível, conforme a configuração em `esg/tests_e2e.py`.
+Validação automatizada: `python manage.py test` executa os testes de pontuação, formulário, integração e os cenários Selenium, incluindo envio completo, destaque de perguntas pendentes, recomendações, exportação do relatório em PDF e consulta do histórico por empresa. Os testes de navegador exigem Chrome e um driver compatível, conforme a configuração em `esg/tests_e2e.py`.

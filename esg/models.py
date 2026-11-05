@@ -1,4 +1,5 @@
 from django.db import models
+from django.db.models import Sum
 
 
 class Empresa(models.Model):
@@ -26,6 +27,15 @@ class Pergunta(models.Model):
 
 
 class Diagnostico(models.Model):
+    class Nivel(models.TextChoices):
+        INICIANTE = "iniciante", "Iniciante"
+        INTERMEDIARIO = "intermediario", "Intermediário"
+        AVANCADO = "avancado", "Avançado"
+
+    pontuacao_total = models.PositiveIntegerField(null=True, blank=True)
+    pontuacao_maxima = models.PositiveIntegerField(null=True, blank=True)
+    nivel = models.CharField(max_length=13, choices=Nivel.choices, blank=True)
+
     empresa = models.ForeignKey(
         Empresa, on_delete=models.CASCADE, related_name="diagnosticos"
     )
@@ -34,8 +44,34 @@ class Diagnostico(models.Model):
     def __str__(self):
         return f"Diagnóstico {self.pk} - {self.empresa.nome}"
 
+    def calcular_pontuacao(self):
+        respostas = self.respostas.all()
+        if not respostas.exists() or respostas.filter(pontuacao__isnull=True).exists():
+            raise ValueError("Todas as respostas precisam de uma pontuação.")
+
+        self.pontuacao_total = respostas.aggregate(total=Sum("pontuacao"))["total"]
+        self.pontuacao_maxima = respostas.count() * max(Resposta.Pontuacao.values)
+
+        if self.pontuacao_total * 3 < self.pontuacao_maxima:
+            self.nivel = self.Nivel.INICIANTE
+        elif self.pontuacao_total * 3 < self.pontuacao_maxima * 2:
+            self.nivel = self.Nivel.INTERMEDIARIO
+        else:
+            self.nivel = self.Nivel.AVANCADO
+
+        self.save(update_fields=["pontuacao_total", "pontuacao_maxima", "nivel"])
+
 
 class Resposta(models.Model):
+    class Pontuacao(models.IntegerChoices):
+        NAO_IMPLEMENTADA = 0, "Não implementada"
+        EM_IMPLEMENTACAO = 1, "Em implementação"
+        IMPLEMENTADA = 2, "Implementada"
+
+    pontuacao = models.PositiveSmallIntegerField(
+        choices=Pontuacao.choices, null=True, blank=True
+    )
+
     diagnostico = models.ForeignKey(
         Diagnostico, on_delete=models.CASCADE, related_name="respostas"
     )

@@ -1,5 +1,5 @@
 from django import forms
-from .models import Comentario, Empresa
+from .models import Comentario, Empresa, Pergunta, Resposta
 
 class EmpresaForm(forms.ModelForm):
     class Meta:
@@ -31,3 +31,38 @@ class ComentarioForm(forms.ModelForm):
             'assunto': {'required': 'O assunto não pode ficar em branco.'},
             'mensagem': {'required': 'Por favor, escreva a sua mensagem.'}
         }
+
+class AvaliacaoForm(forms.Form):
+    empresa = forms.ModelChoiceField(
+        queryset=Empresa.objects.order_by("nome"),
+        label="Empresa",
+        empty_label="Selecione a empresa",
+        widget=forms.Select(attrs={"class": "form-control"}),
+        error_messages={
+            "required": "Selecione a empresa que será avaliada.",
+            "invalid_choice": "Selecione uma empresa cadastrada.",
+        },
+    )
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.perguntas = list(Pergunta.objects.order_by("pilar", "pk"))
+        for pergunta in self.perguntas:
+            self.fields[f"pergunta_{pergunta.pk}"] = forms.TypedChoiceField(
+                label=pergunta.texto,
+                choices=Resposta.Pontuacao.choices,
+                coerce=int,
+                widget=forms.RadioSelect,
+                error_messages={
+                    "required": "Responda esta pergunta antes de submeter a avaliação.",
+                    "invalid_choice": "Selecione uma das opções apresentadas.",
+                },
+            )
+
+    def clean(self):
+        dados = super().clean()
+        if not self.perguntas:
+            raise forms.ValidationError(
+                "O questionário ainda não possui perguntas disponíveis."
+            )
+        return dados

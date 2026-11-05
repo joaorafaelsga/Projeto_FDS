@@ -120,4 +120,6 @@ Acompanhamento e gestão de tarefas do projeto:
 
 ###  Entrega 4:
 
-* **[Documento Guia de Contribuição e Versionamento](CONTRIBUTING.md)**
+* **[Documento Guia de Contribuição e Versionamento](CONTRIBUTING.md)** 
+* **Testes E2E (Selenium):** testes automatizados que simulam o usuário no navegador, cobrindo as páginas do site, o Fale Conosco e o Cadastro de Empresa. Para rodar: `python manage.py test esg`<img width="1480" height="644" alt="image" src="https://github.com/user-attachments/assets/daf43aa2-d9c8-4c96-a516-1e15a6ec5977" />
+

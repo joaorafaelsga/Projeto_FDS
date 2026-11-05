@@ -1,5 +1,5 @@
 from django.contrib import messages
-from django.shortcuts import redirect, render
+from django.shortcuts import get_object_or_404, redirect, render
 
 from .forms import AvaliacaoForm, ComentarioForm, EmpresaForm
 from .models import Diagnostico, Empresa, Pergunta
@@ -72,13 +72,19 @@ def avaliacao(request):
     })
 
 
-def resultado_avaliacao(request):
-    diagnostico = Diagnostico.objects.select_related("empresa").filter(
-        pk=request.session.get("diagnostico_id"),
+def resultado_avaliacao(request, empresa_id=None, diagnostico_id=None):
+    diagnosticos = Diagnostico.objects.select_related("empresa").filter(
+        pontuacao_total__isnull=False,
         pontuacao_maxima__gt=0,
-    ).first()
-    if diagnostico is None:
-        return redirect("avaliacao")
+    ).exclude(nivel="")
+    if diagnostico_id is None:
+        diagnostico = diagnosticos.filter(pk=request.session.get("diagnostico_id")).first()
+        if diagnostico is None:
+            return redirect("avaliacao")
+    else:
+        diagnostico = get_object_or_404(
+            diagnosticos, pk=diagnostico_id, empresa_id=empresa_id
+        )
 
     pilares = diagnostico.gerar_relatorio()
     plano_acao = sorted(

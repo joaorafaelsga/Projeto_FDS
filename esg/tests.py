@@ -266,3 +266,61 @@ class RelatorioViewTests(AvaliacaoTestCase):
         self.assertRedirects(
             self.client.get(reverse("resultado_avaliacao")), reverse("avaliacao")
         )
+
+
+@override_settings(STORAGES={
+    "default": {"BACKEND": "django.core.files.storage.FileSystemStorage"},
+    "staticfiles": {"BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage"},
+})
+class RelatorioHistoricoTests(AvaliacaoTestCase):
+    def avaliar(self, pontuacao):
+        form = AvaliacaoForm(self.dados_avaliacao(pontuacao))
+        self.assertTrue(form.is_valid(), form.errors)
+        return form.save()
+
+    def endereco_relatorio(self, diagnostico, empresa=None):
+        return reverse("relatorio_historico", kwargs={
+            "empresa_id": (empresa or self.empresa).pk,
+            "diagnostico_id": diagnostico.pk,
+        })
+
+    def test_abre_relatorio_salvo_sem_precisar_responder_novamente(self):
+        diagnostico = self.avaliar(1)
+        response = self.client.get(self.endereco_relatorio(diagnostico))
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, "esg/resultado_avaliacao.html")
+        self.assertContains(response, "3 de 6 pontos")
+        self.assertContains(response, "Plano de ação recomendado")
+        self.assertContains(response, "Imprimir / Salvar PDF")
+        self.assertEqual(Diagnostico.objects.count(), 1)
+
+    def test_abrir_avaliacao_antiga_preserva_ultima_avaliacao_da_sessao(self):
+        antiga = self.avaliar(0)
+        self.client.post(reverse("avaliacao"), self.dados_avaliacao(2))
+        ultima_id = self.client.session["diagnostico_id"]
+        response = self.client.get(self.endereco_relatorio(antiga))
+        self.assertContains(response, "0 de 6 pontos")
+        self.assertEqual(self.client.session["diagnostico_id"], ultima_id)
+        self.assertContains(self.client.get(reverse("resultado_avaliacao")), "6 de 6 pontos")
+        self.assertEqual(Diagnostico.objects.count(), 2)
+
+    def test_nao_abre_relatorio_de_empresa_diferente_da_url(self):
+        diagnostico = self.avaliar(1)
+        outra_empresa = Empresa.objects.create(nome="Outra empresa", setor="Comércio", porte="Média")
+        response = self.client.get(self.endereco_relatorio(diagnostico, outra_empresa))
+        self.assertEqual(response.status_code, 404)
+
+    def test_relatorios_inexistentes_ou_sem_pontuacao_retornam_404(self):
+        antiga_sem_nota = Diagnostico.objects.create(empresa=self.empresa)
+        sem_nivel = Diagnostico.objects.create(
+            empresa=self.empresa, pontuacao_total=0, pontuacao_maxima=6
+        )
+        sem_maximo = Diagnostico.objects.create(
+            empresa=self.empresa, pontuacao_total=0, pontuacao_maxima=0, nivel="iniciante"
+        )
+        for identificador in [antiga_sem_nota.pk, sem_nivel.pk, sem_maximo.pk, 99999]:
+            with self.subTest(diagnostico_id=identificador):
+                response = self.client.get(reverse("relatorio_historico", kwargs={
+                    "empresa_id": self.empresa.pk, "diagnostico_id": identificador,
+                }))
+                self.assertEqual(response.status_code, 404)

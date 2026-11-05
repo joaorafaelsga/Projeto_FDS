@@ -7,6 +7,7 @@ from .models import Diagnostico, Empresa, Pergunta, Resposta
 class AvaliacaoTestCase(TestCase):
     @classmethod
     def setUpTestData(cls):
+        Pergunta.objects.all().delete()
         cls.empresa = Empresa.objects.create(
             nome="Empresa Verde", setor="Tecnologia", porte="Pequena",
             email_contato="contato@verde.com",

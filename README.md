@@ -127,33 +127,30 @@ Acompanhamento e gestão de tarefas do projeto:
 
 ### Histórias implementadas
 
+* 🔗 **[Documento de Histórias de Usuário e BDD](HISTORIAS.md)**
+
 <table>
   <tr>
-    <td valign="top" bgcolor="#fff9c4">
-      <strong>US05 — Questionário de Avaliação de Maturidade</strong>
+    <td width="33%" valign="top" bgcolor="#fff9c4">
+      <strong>US05 — Avaliação de maturidade</strong>
       <p><strong>Como</strong> gestor da empresa,<br>
-      <strong>Quero</strong> responder a um questionário com opções objetivas pontuadas,<br>
-      <strong>Para</strong> obter a nota inicial de maturidade sustentável da minha organização.</p>
-      <p><strong>Implementado:</strong> perguntas por pilar ESG, validação das respostas obrigatórias, cálculo da pontuação e exibição do nível de maturidade.</p>
+      <strong>Quero</strong> responder ao questionário ESG,<br>
+      <strong>Para</strong> conhecer a maturidade sustentável da empresa.</p>
     </td>
-    <td valign="top" bgcolor="#e3f2fd">
-      <strong>US06 — Emissão de Relatório e Recomendações</strong>
+    <td width="33%" valign="top" bgcolor="#e3f2fd">
+      <strong>US06 — Relatório e recomendações</strong>
       <p><strong>Como</strong> gestor da empresa,<br>
-      <strong>Quero</strong> visualizar um relatório com sugestões baseadas no diagnóstico,<br>
-      <strong>Para</strong> elaborar um plano de ação para melhorar as práticas ESG.</p>
-      <p><strong>Implementado:</strong> tabela comparativa dos pilares, recomendações em ordem de prioridade e impressão ou salvamento em PDF pelo navegador.</p>
+      <strong>Quero</strong> consultar um relatório com recomendações,<br>
+      <strong>Para</strong> planejar melhorias nas práticas ESG.</p>
     </td>
-    <td valign="top" bgcolor="#fce4ec">
-      <strong>US07 — Histórico de Avaliações ESG</strong>
+    <td width="33%" valign="top" bgcolor="#fce4ec">
+      <strong>US07 — Histórico de avaliações</strong>
       <p><strong>Como</strong> gestor da empresa,<br>
-      <strong>Quero</strong> consultar o histórico das avaliações ESG realizadas,<br>
-      <strong>Para</strong> acompanhar a evolução da maturidade sustentável da organização.</p>
-      <p><strong>Implementado:</strong> seleção de empresa, avaliações da mais recente para a mais antiga, consulta de relatórios anteriores e mensagem para histórico vazio.</p>
+      <strong>Quero</strong> consultar as avaliações anteriores,<br>
+      <strong>Para</strong> acompanhar a evolução da maturidade ESG.</p>
     </td>
   </tr>
 </table>
-
-As regras e os cenários das histórias US05, US06 e US07 estão descritos no [documento de histórias e BDD](HISTORIAS.md).
 
 Para experimentar a avaliação, execute `python manage.py migrate`, inicie o servidor e acesse **Avaliação ESG** no menu. Cadastre uma empresa caso ainda não exista nenhuma. Depois de submeter a avaliação, o resultado apresenta o comparativo e o plano de ação. Clique em **Imprimir / Salvar PDF** para imprimir o relatório ou escolher o destino PDF no navegador. Para consultar avaliações anteriores, acesse **Histórico ESG**, selecione a empresa e clique em **Consultar histórico**. Use **Ver relatório** para abrir uma avaliação salva.
 

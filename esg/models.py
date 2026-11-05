@@ -61,7 +61,6 @@ class Diagnostico(models.Model):
 
         self.save(update_fields=["pontuacao_total", "pontuacao_maxima", "nivel"])
 
-
     def gerar_relatorio(self):
         recomendacoes = {
             Pergunta.Pilar.AMBIENTAL: [

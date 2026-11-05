@@ -1,3 +1,5 @@
+import base64
+
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from django.test import override_settings
 from selenium import webdriver
@@ -156,3 +158,50 @@ class TestesE2E(StaticLiveServerTestCase):
                 By.CSS_SELECTOR, f'input[name="pergunta_{pergunta.pk}"][value="1"]'
             ).is_selected())
         self.assertFalse(Diagnostico.objects.exists())
+
+
+    # ---------- Relatório e recomendações ----------
+
+    def concluir_avaliacao_para_relatorio(self, pontuacoes):
+        perguntas = self.preparar_avaliacao()
+        for pergunta, pontuacao in zip(perguntas, pontuacoes):
+            self.driver.find_element(
+                By.CSS_SELECTOR,
+                f'input[name="pergunta_{pergunta.pk}"][value="{pontuacao}"]',
+            ).click()
+        self.driver.find_element(By.CSS_SELECTOR, ".avaliacao button[type=submit]").click()
+        WebDriverWait(self.driver, 5).until(
+            lambda driver: "Plano de ação recomendado"
+            in driver.find_element(By.CSS_SELECTOR, ".relatorio-plano").text
+        )
+
+    def test_relatorio_compara_pilares_e_prioriza_governanca(self):
+        self.concluir_avaliacao_para_relatorio([2, 2, 0])
+        linhas = self.driver.find_elements(By.CSS_SELECTOR, ".relatorio-tabela tbody tr")
+        self.assertEqual(len(linhas), 3)
+        self.assertIn("Ambiental", linhas[0].text)
+        self.assertIn("Governança", linhas[2].text)
+        self.assertIn("0 de 2", linhas[2].text)
+        primeira_recomendacao = self.driver.find_element(By.CSS_SELECTOR, ".relatorio-recomendacao")
+        self.assertIn("Governança", primeira_recomendacao.text)
+        self.assertIn("Prioridade: Alta", primeira_recomendacao.text)
+        self.assertIn("compliance", primeira_recomendacao.text)
+
+    def test_relatorio_imprime_sem_menu_e_gera_pdf(self):
+        self.concluir_avaliacao_para_relatorio([1, 1, 1])
+        self.driver.execute_script(
+            "window.print = () => { window.impressaoSolicitada = true; };"
+        )
+        self.driver.find_element(By.ID, "imprimir-relatorio").click()
+        self.assertTrue(self.driver.execute_script("return window.impressaoSolicitada;"))
+
+        self.driver.execute_cdp_cmd("Emulation.setEmulatedMedia", {"media": "print"})
+        try:
+            for seletor in [".navbar", ".site-footer", ".relatorio-acoes"]:
+                self.assertFalse(self.driver.find_element(By.CSS_SELECTOR, seletor).is_displayed())
+            for seletor in [".relatorio-tabela", ".relatorio-recomendacao"]:
+                self.assertTrue(self.driver.find_element(By.CSS_SELECTOR, seletor).is_displayed())
+            pdf = self.driver.execute_cdp_cmd("Page.printToPDF", {"printBackground": True})
+            self.assertTrue(base64.b64decode(pdf["data"]).startswith(b"%PDF-"))
+        finally:
+            self.driver.execute_cdp_cmd("Emulation.setEmulatedMedia", {"media": ""})

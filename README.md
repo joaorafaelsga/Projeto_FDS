@@ -151,3 +151,8 @@ Acompanhamento e gestão de tarefas do projeto:
     </td>
   </tr>
 </table>
+
+## 🎥 Vídeos de Demonstração e Explicação
+* **Vídeo 1 (Screencast Implementação das historias):** [https://youtu.be/g9-xjycy7-o]
+* **Vídeo 2 (Screencast do teste automatizado):** [https://youtu.be/D47R4WnKd8c]
+* **Vídeo 3 (Screencast CI/CD):** [https://youtu.be/0Mf1M9DMio8?is=XIGJCdmclvYijSsm]
